@@ -1,0 +1,963 @@
+---
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  statusLabel: string;
+  date: string;
+  dateISO: string;
+}
+
+const { lang, statusLabel, date, dateISO } = Astro.props;
+const copy = lang === 'nl'
+  ? {
+      back: '← Bouwstenen',
+      title: 'Noesis',
+      pronunciation: '/ˈnoʊ.ə.sɪs/',
+      tagline: 'Een agentic onderzoeksassistent die academische artikelen vindt, beoordeelt en rangschikt op basis van jouw onderzoeksvraag.',
+      openSource: 'Open source',
+      workflow: 'Agentic workflow',
+      github: 'Bekijk op GitHub ↗',
+      clone: 'Kopieer git clone-commando',
+      cloned: 'Gekopieerd',
+      copyFailed: 'Kopiëren mislukt',
+      tabs: ['Probleem & visie', 'Werkwijze', 'Roadmap', 'Simulator'],
+      problemTitle: 'Waarom Noesis?',
+      problemText: 'Wetenschappelijke literatuur vermenigvuldigt zich in dit AI-tijdperk ontzettend snel. Het juiste artikel vinden tussen abstracts, trefwoorden en steeds meer publicaties kost tijd, vooral wanneer je zoekt naar een specifieke methode, dataset of technische beperking.',
+      bottlenecksTitle: 'Waar zoeken tekortschiet',
+      bottlenecks: [
+        ['Abstracts vertellen niet het hele verhaal', 'Methodologische beperkingen zijn vaak pas in de volledige paper zichtbaar.'],
+        ['Trefwoorden geven veel ruis', 'Een zoekterm kan honderden resultaten opleveren die inhoudelijk niet passen.'],
+        ['Handmatig screenen schaalt niet', 'Veel artikelen en PDF-tabbladen één voor één beoordelen kost onnodig veel tijd.'],
+      ],
+      promiseTitle: 'Van zoekresultaat naar onderbouwde keuze',
+      promise: 'Noesis richt zich op inhoudelijke aansluiting: welke claims, methoden en resultaten zijn relevant voor jouw vraag én waarom?',
+      values: [
+        ['Sneller screenen', 'Krijg snel zicht op de gebruikte datasets, theorieën en methoden.'],
+        ['Inhoudelijke beoordeling', 'Kijk voorbij de titel naar claims, aannames en resultaten.'],
+        ['Gerichte shortlist', 'Bekijk eerst de artikelen met de beste onderbouwde fit.'],
+      ],
+      workflowTitle: 'Van vraag naar artikelshortlist',
+      workflowIntro: 'De beoogde pipeline bestaat uit vier stappen:',
+      steps: [
+        ['01 — Ontdekken', 'Artikelen ophalen via academische bronnen, passend bij de zoekcontext.'],
+        ['02 — Extraheren', 'Claims, methoden, datasets en beperkingen structureren.'],
+        ['03 — Beoordelen', 'De inhoudelijke fit met de onderzoeksvraag inschatten en motiveren.'],
+        ['04 — Samenvatten', 'Een gerangschikt overzicht leveren met argumenten voor verder lezen.'],
+      ],
+      jsonLabel: 'Voorbeeld van een gestructureerde agent-uitvoer (JSON)',
+      copyJson: 'Kopieer JSON',
+      jsonCopied: 'JSON gekopieerd',
+      roadmapTitle: 'Roadmap',
+      roadmapIntro: 'Noesis is in actieve ontwikkeling. Dit zijn de volgende richtingen:',
+      roadmap: [
+        ['In ontwikkeling', 'Analyse van volledige PDF’s', 'Een modulaire RAG-pipeline om volledige artikelen en bijlagen doorzoekbaar te maken.'],
+        ['Gepland', 'Gespecialiseerde reviewer-agents', 'Meerdere rollen, zoals een methodologie-auditor en domeinspecialist, beoordelen een artikel vanuit verschillende perspectieven.'],
+        ['Op de roadmap', 'Citatie- en contextgrafieken', 'Artikelen verbinden met eerder werk en geciteerde bronnen.'],
+        ['Op de roadmap', 'Eigen filters en criteria', 'Criteria instellen voor bijvoorbeeld open-source code, benchmarks of hardwarevereisten.'],
+      ],
+      simulatorTitle: 'Agent-evaluatie simuleren',
+      simulatorIntro: 'Kies een onderzoeksvraag en een voorbeeldartikel om een gesimuleerde beoordeling te bekijken. Dit is een interface-demo, geen live modelaanroep.',
+      topicLabel: 'Onderzoeksvraag',
+      paperLabel: 'Voorbeeldpaper',
+      topics: [
+        ['rag', 'RAG voor lange contexten en weinig geheugen'],
+        ['agents', 'Multi-agent samenwerking voor codegeneratie'],
+        ['quant', 'LLM-quantisatie op consumenten-GPU’s'],
+      ],
+      papers: [
+        ['paper1', 'Artikel A — Efficiënte aandacht voor lange contexten'],
+        ['paper2', 'Artikel B — Hallucinaties in meerbeurtengesprekken'],
+        ['paper3', 'Artikel C — 4-bit-quantisatie voor edge-netwerken'],
+      ],
+      run: 'Simuleer evaluatie',
+      idle: 'De simulatie-uitvoer verschijnt hier.',
+      complete: 'VOLTOOID',
+      queryMapped: 'Zoekcontext verwerkt',
+      fetching: 'Paper-metadata ophalen',
+      extracting: 'Methoden, benchmarks en codebeschikbaarheid analyseren',
+      evaluating: 'Relevantie beoordelen',
+      score: 'Relevantie',
+      rationale: 'Motivatie',
+      rationales: {
+        strongRag: 'Sluit direct aan op sparse attention en de geheugenbeperking in lange-contexttoepassingen.',
+        strongQuant: 'Bespreekt quantisatie en benchmarks op hardware die aansluit bij de onderzoeksvraag.',
+        low: 'De paper sluit beperkt aan op de gekozen onderzoeksvraag en randvoorwaarden.',
+      },
+      builtBy: 'Een onderzoeksprototype van',
+    }
+  : {
+      back: '← Building blocks',
+      title: 'Noesis',
+      pronunciation: '/ˈnoʊ.ə.sɪs/',
+      tagline: 'An agentic research assistant that finds, evaluates, and ranks academic papers against your research question.',
+      openSource: 'Open source',
+      workflow: 'Agentic workflow',
+      github: 'View on GitHub ↗',
+      clone: 'Copy git clone command',
+      cloned: 'Copied',
+      copyFailed: 'Copy failed',
+      tabs: ['Problem & vision', 'Workflow', 'Roadmap', 'Simulator'],
+      problemTitle: 'Why Noesis?',
+      problemText: 'Scientific literature is growing quickly. Finding the right paper among abstracts, keywords, and a rising number of publications takes time — especially when you are looking for a specific method, dataset, or technical constraint.',
+      bottlenecksTitle: 'Where search falls short',
+      bottlenecks: [
+        ['Abstracts do not tell the whole story', 'Methodological limitations often only become clear in the full paper.'],
+        ['Keywords create noise', 'A search term can return hundreds of results that do not fit the actual question.'],
+        ['Manual screening does not scale', 'Reviewing papers and PDF tabs one by one takes valuable time.'],
+      ],
+      promiseTitle: 'From search results to informed choices',
+      promise: 'Noesis focuses on substantive fit: which claims, methods, and results matter to your question — and why?',
+      values: [
+        ['Screen faster', 'Quickly see which datasets and methods a paper uses.'],
+        ['Evaluate substance', 'Look beyond the title at claims, assumptions, and results.'],
+        ['Build a focused shortlist', 'Start with papers whose fit is best supported.'],
+      ],
+      workflowTitle: 'From research question to shortlist',
+      workflowIntro: 'The intended pipeline has four steps:',
+      steps: [
+        ['01 — Discover', 'Retrieve papers from academic sources that match the search context.'],
+        ['02 — Extract', 'Structure claims, methods, datasets, and limitations.'],
+        ['03 — Evaluate', 'Assess and explain each paper’s fit with the research question.'],
+        ['04 — Summarize', 'Produce a ranked digest with reasons to read further.'],
+      ],
+      jsonLabel: 'Example of structured agent output (JSON)',
+      copyJson: 'Copy JSON',
+      jsonCopied: 'JSON copied',
+      roadmapTitle: 'Roadmap',
+      roadmapIntro: 'Noesis is in active development. These are the next directions:',
+      roadmap: [
+        ['In development', 'Full-PDF analysis', 'A modular RAG pipeline to make complete papers and appendices searchable.'],
+        ['Planned', 'Specialized reviewer agents', 'Roles such as a methodology auditor and domain specialist assess a paper from different perspectives.'],
+        ['On the roadmap', 'Citation and context graphs', 'Connect papers to prior work and cited sources.'],
+        ['On the roadmap', 'Custom filters and criteria', 'Set criteria for open-source code, benchmarks, hardware requirements, and more.'],
+      ],
+      simulatorTitle: 'Simulate an agent evaluation',
+      simulatorIntro: 'Choose a research question and sample paper to view a simulated assessment. This is an interface demo, not a live model call.',
+      topicLabel: 'Research question',
+      paperLabel: 'Sample paper',
+      topics: [
+        ['rag', 'RAG for long contexts and limited memory'],
+        ['agents', 'Multi-agent collaboration for code generation'],
+        ['quant', 'LLM quantization on consumer GPUs'],
+      ],
+      papers: [
+        ['paper1', 'Paper A — Efficient attention for long contexts'],
+        ['paper2', 'Paper B — Hallucinations in multi-turn conversations'],
+        ['paper3', 'Paper C — 4-bit quantization for edge networks'],
+      ],
+      run: 'Simulate evaluation',
+      idle: 'Simulation output will appear here.',
+      complete: 'COMPLETE',
+      queryMapped: 'Search context mapped',
+      fetching: 'Fetching paper metadata',
+      extracting: 'Analyzing methods, benchmarks, and code availability',
+      evaluating: 'Evaluating relevance',
+      score: 'Relevance',
+      rationale: 'Rationale',
+      rationales: {
+        strongRag: 'Directly addresses sparse attention and memory constraints in long-context applications.',
+        strongQuant: 'Covers quantization and benchmarks on hardware relevant to the research question.',
+        low: 'The paper has limited alignment with the selected question and constraints.',
+      },
+      builtBy: 'A research prototype by',
+    };
+
+const cloneCommand = 'git clone https://github.com/Diana-Gyurjiyan/noesis.git';
+const jsonOutput = `{
+  "paper_id": "arXiv:2403.99120",
+  "title": "Agentic Workflows in Small Language Model Fine-Tuning",
+  "relevance_score": 0.94,
+  "fit_verdict": "HIGH_PRIORITY_READ",
+  "key_extractions": {
+    "methodology": "Multi-agent critique loop with DPO",
+    "benchmark_used": ["GSM8K", "HumanEval"],
+    "code_available": true
+  },
+  "agent_rationale": "Matches the query's memory constraints and evaluation criteria."
+}`;
+---
+
+<article class="noesis wrap" data-noesis data-lang={lang} data-clone={cloneCommand} data-json={jsonOutput}>
+  <div class="eyebrow"><a href={`/${lang}/building-blocks/`} class="back-link">{copy.back}</a></div>
+
+  <header class="project-header">
+    <div class="project-meta">
+      <span class="pill">{statusLabel}</span>
+      <time datetime={dateISO}>{date}</time>
+      <span>{copy.openSource}</span>
+      <span>{copy.workflow}</span>
+    </div>
+    <h1 class="page-title">{copy.title} <span class="pronunciation">{copy.pronunciation}</span></h1>
+    <p class="lede">{copy.tagline}</p>
+    <div class="project-actions">
+      <a class="project-link" href="https://github.com/Diana-Gyurjiyan/noesis" target="_blank" rel="noopener noreferrer">{copy.github}</a>
+      <button class="text-button" type="button" data-copy="clone">{copy.clone}</button>
+      <span class="copy-status" data-copy-status aria-live="polite"></span>
+    </div>
+  </header>
+
+  <nav class="project-tabs" aria-label={lang === 'nl' ? 'Noesis-onderdelen' : 'Noesis sections'} role="tablist">
+    {copy.tabs.map((label, i) => (
+      <button
+        type="button"
+        id={`noesis-tab-${i}`}
+        class="project-tab"
+        role="tab"
+        aria-selected={i === 0 ? 'true' : 'false'}
+        aria-controls={`noesis-panel-${i}`}
+        tabindex={i === 0 ? 0 : -1}
+        data-tab={i}
+      >{label}</button>
+    ))}
+  </nav>
+
+  <section class="project-panel" id="noesis-panel-0" role="tabpanel" aria-labelledby="noesis-tab-0" data-panel="0">
+    <div class="section-heading">
+      <p class="eyebrow">{copy.tabs[0]}</p>
+      <h2>{copy.problemTitle}</h2>
+      <p>{copy.problemText}</p>
+    </div>
+    <h3 class="subheading">{copy.bottlenecksTitle}</h3>
+    <div class="card-grid">
+      {copy.bottlenecks.map(([title, description], i) => (
+        <article class="plain-card">
+          <span class="card-number">0{i + 1}</span>
+          <h3>{title}</h3>
+          <p>{description}</p>
+        </article>
+      ))}
+    </div>
+    <div class="project-note">
+      <h3>{copy.promiseTitle}</h3>
+      <p>{copy.promise}</p>
+    </div>
+    <div class="card-grid value-grid">
+      {copy.values.map(([title, description]) => (
+        <article class="value-card">
+          <h3>{title}</h3>
+          <p>{description}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="project-panel" id="noesis-panel-1" role="tabpanel" aria-labelledby="noesis-tab-1" data-panel="1" hidden>
+    <div class="section-heading">
+      <p class="eyebrow">{copy.tabs[1]}</p>
+      <h2>{copy.workflowTitle}</h2>
+      <p>{copy.workflowIntro}</p>
+    </div>
+    <div class="steps">
+      {copy.steps.map(([title, description]) => (
+        <article class="step">
+          <h3>{title}</h3>
+          <p>{description}</p>
+        </article>
+      ))}
+    </div>
+    <div class="json-heading">
+      <h3>{copy.jsonLabel}</h3>
+      <button class="text-button" type="button" data-copy="json">{copy.copyJson}</button>
+    </div>
+    <pre class="json-example"><code>{jsonOutput}</code></pre>
+    <span class="copy-status" data-json-status aria-live="polite"></span>
+  </section>
+
+  <section class="project-panel" id="noesis-panel-2" role="tabpanel" aria-labelledby="noesis-tab-2" data-panel="2" hidden>
+    <div class="section-heading">
+      <p class="eyebrow">{copy.tabs[2]}</p>
+      <h2>{copy.roadmapTitle}</h2>
+      <p>{copy.roadmapIntro}</p>
+    </div>
+    <div class="roadmap">
+      {copy.roadmap.map(([status, title, description], i) => (
+        <article class="roadmap-item">
+          <div class="roadmap-index">0{i + 1}</div>
+          <div>
+            <div class="roadmap-meta"><span class="pill">{status}</span></div>
+            <h3>{title}</h3>
+            <p>{description}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="project-panel" id="noesis-panel-3" role="tabpanel" aria-labelledby="noesis-tab-3" data-panel="3" hidden>
+    <div class="section-heading">
+      <p class="eyebrow">{copy.tabs[3]}</p>
+      <h2>{copy.simulatorTitle}</h2>
+      <p>{copy.simulatorIntro}</p>
+    </div>
+    <div class="sim-controls">
+      {[
+        { id: 'topic', label: copy.topicLabel, options: copy.topics },
+        { id: 'paper', label: copy.paperLabel, options: copy.papers },
+      ].map(({ id, label, options }) => (
+        <div class="sim-field">
+          <span class="sim-field-label" id={`sim-${id}-label`}>{label}</span>
+          <select
+            class="native-select"
+            data-topic={id === 'topic' ? '' : undefined}
+            data-paper={id === 'paper' ? '' : undefined}
+            aria-hidden="true"
+            tabindex="-1"
+          >
+            {options.map(([value, optionLabel]) => <option value={value}>{optionLabel}</option>)}
+          </select>
+          <div class="custom-select" data-custom-select>
+            <button
+              class="select-trigger"
+              type="button"
+              role="combobox"
+              aria-labelledby={`sim-${id}-label sim-${id}-value`}
+              aria-haspopup="listbox"
+              aria-expanded="false"
+              aria-controls={`sim-${id}-options`}
+              data-select-trigger
+            >
+              <span id={`sim-${id}-value`} data-select-value>{options[0][1]}</span>
+              <span class="select-chevron" aria-hidden="true"></span>
+            </button>
+            <div class="select-options" id={`sim-${id}-options`} role="listbox" aria-labelledby={`sim-${id}-label`} hidden>
+              {options.map(([value, optionLabel], i) => (
+                <div
+                  class="select-option"
+                  id={`sim-${id}-option-${i}`}
+                  role="option"
+                  aria-selected={i === 0 ? 'true' : 'false'}
+                  aria-label={optionLabel}
+                  tabindex="-1"
+                  data-option
+                  data-value={value}
+                >
+                  <span>{optionLabel}</span>
+                  <span class="option-check" aria-hidden="true">✓</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+    <button class="project-link sim-run" type="button" data-run>{copy.run}</button>
+    <div class="sim-output" aria-live="polite" data-output>{copy.idle}</div>
+  </section>
+
+  <footer class="project-footer">
+    <span>{copy.builtBy} <a href="https://github.com/Diana-Gyurjiyan" target="_blank" rel="noopener noreferrer">Diana Gyurjiyan</a>.</span>
+    <span><time datetime={dateISO}>{date}</time></span>
+  </footer>
+</article>
+
+<style>
+  .noesis {
+    --project-accent: var(--ac);
+    padding-top: clamp(38px, 6vw, 72px);
+  }
+  .back-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .back-link:hover,
+  .project-footer a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .project-header {
+    padding-bottom: clamp(32px, 5vw, 56px);
+    border-bottom: 1px solid var(--ln);
+  }
+  .project-meta,
+  .project-actions,
+  .roadmap-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    color: var(--mu);
+    font-size: 13px;
+  }
+  .project-meta {
+    margin-bottom: 22px;
+  }
+  .project-meta .pill,
+  .roadmap-meta .pill {
+    color: var(--project-accent);
+    border-color: color-mix(in srgb, var(--project-accent) 45%, var(--ln));
+  }
+  .pronunciation {
+    color: var(--ac);
+    font: 400 0.4em/1 var(--sans);
+    white-space: nowrap;
+    vertical-align: 0.3em;
+  }
+  .project-actions {
+    margin-top: 24px;
+  }
+  .project-link,
+  .text-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 8px 14px;
+    border: 1px solid var(--project-accent);
+    border-radius: 2px;
+    background: var(--project-accent);
+    color: var(--bg);
+    font: 500 13px/1.3 var(--sans);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .text-button {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--ln);
+  }
+  .project-link:hover,
+  .text-button:hover {
+    opacity: 0.78;
+  }
+  .copy-status {
+    color: var(--mu);
+    font-size: 12px;
+  }
+  .project-tabs {
+    display: flex;
+    gap: clamp(16px, 3vw, 34px);
+    overflow-x: auto;
+    border-bottom: 1px solid var(--ln);
+    margin-top: 10px;
+  }
+  .project-tab {
+    flex: 0 0 auto;
+    padding: 16px 0 12px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: var(--mu);
+    font: 400 17px/1.2 var(--serif);
+    cursor: pointer;
+  }
+  .project-tab[aria-selected='true'] {
+    border-bottom-color: var(--project-accent);
+    color: var(--ink);
+  }
+  .project-panel {
+    padding: clamp(30px, 5vw, 56px) 0;
+  }
+  .section-heading {
+    max-width: 66ch;
+    margin-bottom: 32px;
+  }
+  .section-heading .eyebrow {
+    margin-bottom: 12px;
+  }
+  .section-heading h2,
+  .project-note h3 {
+    font-size: clamp(32px, 4.3cqi, 48px);
+    line-height: 1;
+  }
+  .section-heading > p:last-child,
+  .project-note p {
+    margin-top: 14px;
+    color: var(--mu);
+  }
+  .subheading {
+    margin-bottom: 14px;
+    font: 400 24px/1.2 var(--serif);
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--ln);
+    border-bottom: 1px solid var(--ln);
+  }
+  .plain-card,
+  .value-card {
+    padding: 22px 20px 22px 0;
+  }
+  .plain-card + .plain-card,
+  .value-card + .value-card {
+    padding-left: 20px;
+    border-left: 1px solid var(--ln);
+  }
+  .card-number {
+    color: var(--ac);
+    font-size: 12px;
+  }
+  .plain-card h3,
+  .value-card h3,
+  .step h3,
+  .roadmap-item h3,
+  .json-heading h3 {
+    margin-top: 12px;
+    font: 400 21px/1.15 var(--serif);
+  }
+  .plain-card p,
+  .value-card p,
+  .step p,
+  .roadmap-item p {
+    margin-top: 8px;
+    color: var(--mu);
+    font-size: 14px;
+  }
+  .project-note {
+    margin: clamp(34px, 5vw, 56px) 0;
+    padding-left: 20px;
+    border-left: 1px solid var(--project-accent);
+  }
+  .project-note h3 {
+    font-size: 30px;
+  }
+  .value-grid {
+    border-top: 0;
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    margin-bottom: 44px;
+  }
+  .step {
+    padding-top: 14px;
+    border-top: 1px solid var(--project-accent);
+  }
+  .step h3 {
+    margin-top: 0;
+  }
+  .json-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .json-heading h3 {
+    margin: 0;
+  }
+  .json-example {
+    overflow-x: auto;
+    padding: 22px;
+    border: 1px solid var(--ln);
+    background: color-mix(in srgb, var(--blk) 8%, var(--bg));
+    color: var(--ink);
+    font: 400 12px/1.7 ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .roadmap {
+    border-top: 1px solid var(--ln);
+  }
+  .roadmap-item {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 14px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--ln);
+  }
+  .roadmap-index {
+    color: var(--ac);
+    font-size: 13px;
+    padding-top: 5px;
+  }
+  .roadmap-item h3 {
+    margin-top: 12px;
+  }
+  .roadmap-item p {
+    max-width: 65ch;
+  }
+  .sim-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    padding: 22px 0;
+    border-top: 1px solid var(--ln);
+    border-bottom: 1px solid var(--ln);
+  }
+  .sim-field {
+    display: grid;
+    gap: 8px;
+    color: var(--mu);
+    font-size: 13px;
+  }
+  .sim-field-label {
+    display: block;
+  }
+  .native-select {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+  .custom-select {
+    position: relative;
+    min-width: 0;
+  }
+  .select-trigger {
+    display: flex;
+    width: 100%;
+    min-height: 50px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border: 1px solid var(--ln);
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--blk) 5%, var(--bg));
+    color: var(--ink);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .select-trigger:hover,
+  .custom-select[data-open='true'] .select-trigger {
+    border-color: color-mix(in srgb, var(--project-accent) 55%, var(--ln));
+  }
+  .select-trigger:focus-visible {
+    border-color: var(--project-accent);
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--project-accent) 18%, transparent);
+  }
+  .select-chevron {
+    width: 9px;
+    height: 9px;
+    flex: 0 0 auto;
+    border-right: 1px solid var(--mu);
+    border-bottom: 1px solid var(--mu);
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform 0.2s ease;
+  }
+  .custom-select[data-open='true'] .select-chevron {
+    transform: translateY(2px) rotate(225deg);
+  }
+  .select-options {
+    position: absolute;
+    z-index: 5;
+    top: calc(100% + 8px);
+    right: 0;
+    left: 0;
+    display: grid;
+    gap: 3px;
+    max-height: 240px;
+    overflow-y: auto;
+    padding: 6px;
+    border: 1px solid var(--ln);
+    border-radius: 3px;
+    background: var(--bg);
+    box-shadow: 0 12px 30px color-mix(in srgb, var(--ink) 14%, transparent);
+  }
+  .select-options[hidden] {
+    display: none;
+  }
+  .select-option {
+    display: flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 10px;
+    border-radius: 2px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .select-option:hover,
+  .select-option:focus,
+  .select-option[data-active='true'] {
+    outline: none;
+    background: color-mix(in srgb, var(--project-accent) 9%, var(--bg));
+  }
+  .select-option[aria-selected='true'] {
+    color: var(--project-accent);
+  }
+  .option-check {
+    visibility: hidden;
+    color: var(--project-accent);
+  }
+  .select-option[aria-selected='true'] .option-check {
+    visibility: visible;
+  }
+  .sim-run {
+    margin-top: 20px;
+  }
+  .sim-run:disabled {
+    cursor: wait;
+    opacity: 0.6;
+  }
+  .sim-output {
+    min-height: 100px;
+    margin-top: 18px;
+    padding: 18px;
+    border: 1px solid var(--ln);
+    color: var(--mu);
+    font: 400 13px/1.7 ui-monospace, SFMono-Regular, Menlo, monospace;
+    white-space: pre-wrap;
+  }
+  .sim-output strong {
+    color: var(--ink);
+  }
+  .project-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 20px;
+    padding: 20px 0 8px;
+    border-top: 1px solid var(--ln);
+    color: var(--mu);
+    font-size: 12px;
+  }
+  .project-footer a {
+    color: var(--ink);
+  }
+  @media (max-width: 700px) {
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
+    .plain-card,
+    .value-card {
+      padding: 18px 0;
+    }
+    .plain-card + .plain-card,
+    .value-card + .value-card {
+      padding-left: 0;
+      border-left: 0;
+      border-top: 1px solid var(--ln);
+    }
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .sim-controls {
+      grid-template-columns: 1fr;
+    }
+    .pronunciation {
+      display: block;
+      margin-top: 12px;
+      font-size: 0.35em;
+    }
+  }
+  @media (max-width: 420px) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+    .json-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>
+
+<script>
+  const project = document.querySelector<HTMLElement>('[data-noesis]');
+
+  if (project) {
+    const lang = project.dataset.lang === 'nl' ? 'nl' : 'en';
+    const labels = lang === 'nl'
+      ? {
+          cloned: 'Gekopieerd',
+          jsonCopied: 'JSON gekopieerd',
+          copyFailed: 'Kopiëren mislukt',
+          running: 'AGENT BEZIG…',
+          complete: 'VOLTOOID',
+          queryMapped: 'Zoekcontext verwerkt',
+          fetching: 'Paper-metadata ophalen',
+          extracting: 'Methoden, benchmarks en codebeschikbaarheid analyseren',
+          evaluating: 'Relevantie beoordelen',
+          score: 'Relevantie',
+          rationale: 'Motivatie',
+          strongRag: 'Sluit direct aan op sparse attention en de geheugenbeperking in lange-contexttoepassingen.',
+          strongQuant: 'Bespreekt quantisatie en benchmarks op hardware die aansluit bij de onderzoeksvraag.',
+          low: 'De paper sluit beperkt aan op de gekozen onderzoeksvraag en randvoorwaarden.',
+          topics: {
+            rag: 'RAG voor lange contexten en weinig geheugen',
+            agents: 'Multi-agent samenwerking voor codegeneratie',
+            quant: 'LLM-quantisatie op consumenten-GPU’s',
+          },
+        }
+      : {
+          cloned: 'Copied',
+          jsonCopied: 'JSON copied',
+          copyFailed: 'Copy failed',
+          running: 'AGENT RUNNING…',
+          complete: 'COMPLETE',
+          queryMapped: 'Search context mapped',
+          fetching: 'Fetching paper metadata',
+          extracting: 'Analyzing methods, benchmarks, and code availability',
+          evaluating: 'Evaluating relevance',
+          score: 'Relevance',
+          rationale: 'Rationale',
+          strongRag: 'Directly addresses sparse attention and memory constraints in long-context applications.',
+          strongQuant: 'Covers quantization and benchmarks on hardware relevant to the research question.',
+          low: 'The paper has limited alignment with the selected question and constraints.',
+          topics: {
+            rag: 'RAG for long contexts and limited memory',
+            agents: 'Multi-agent collaboration for code generation',
+            quant: 'LLM quantization on consumer GPUs',
+          },
+        };
+    const copyStatus = project.querySelector<HTMLElement>('[data-copy-status]');
+    const jsonStatus = project.querySelector<HTMLElement>('[data-json-status]');
+    const cloneCommand = project.dataset.clone ?? '';
+    const jsonOutput = project.dataset.json ?? '';
+
+    const copyText = async (text: string, target: HTMLElement | null, message: string) => {
+      if (!target) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        target.textContent = message;
+      } catch {
+        target.textContent = labels.copyFailed;
+      }
+      window.setTimeout(() => {
+        target.textContent = '';
+      }, 2200);
+    };
+
+    project.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const isJson = button.dataset.copy === 'json';
+        void copyText(isJson ? jsonOutput : cloneCommand, isJson ? jsonStatus : copyStatus, isJson ? labels.jsonCopied : labels.cloned);
+      });
+    });
+
+    const tabs = Array.from(project.querySelectorAll<HTMLButtonElement>('[data-tab]'));
+    const panels = Array.from(project.querySelectorAll<HTMLElement>('[data-panel]'));
+    const activateTab = (selected: HTMLButtonElement) => {
+      tabs.forEach((tab) => {
+        const active = tab === selected;
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.panel !== selected.dataset.tab;
+      });
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateTab(tab));
+      tab.addEventListener('keydown', (event) => {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+        event.preventDefault();
+        const step = event.key === 'ArrowRight' ? 1 : -1;
+        const next = tabs[(index + step + tabs.length) % tabs.length];
+        activateTab(next);
+        next.focus();
+      });
+    });
+
+    project.querySelectorAll<HTMLElement>('[data-custom-select]').forEach((wrapper) => {
+      const trigger = wrapper.querySelector<HTMLButtonElement>('[data-select-trigger]');
+      const valueLabel = wrapper.querySelector<HTMLElement>('[data-select-value]');
+      const nativeSelect = wrapper.parentElement?.querySelector<HTMLSelectElement>('select');
+      const listbox = wrapper.querySelector<HTMLElement>('[role="listbox"]');
+      const options = Array.from(wrapper.querySelectorAll<HTMLElement>('[data-option]'));
+      if (!trigger || !valueLabel || !nativeSelect || !listbox || options.length === 0) return;
+
+      let activeIndex = Math.max(0, options.findIndex((option) => option.dataset.value === nativeSelect.value));
+      const setActive = (index: number) => {
+        activeIndex = (index + options.length) % options.length;
+        options.forEach((option, optionIndex) => {
+          option.dataset.active = String(optionIndex === activeIndex);
+        });
+        trigger.setAttribute('aria-activedescendant', options[activeIndex].id);
+      };
+      const close = (restoreFocus = false) => {
+        wrapper.dataset.open = 'false';
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.removeAttribute('aria-activedescendant');
+        listbox.hidden = true;
+        if (restoreFocus) trigger.focus();
+      };
+      const open = (initialIndex = activeIndex) => {
+        wrapper.dataset.open = 'true';
+        trigger.setAttribute('aria-expanded', 'true');
+        listbox.hidden = false;
+        setActive(initialIndex);
+      };
+      const choose = (option: HTMLElement) => {
+        const value = option.dataset.value;
+        if (value === undefined) return;
+        nativeSelect.value = value;
+        valueLabel.textContent = option.querySelector('span')?.textContent ?? '';
+        options.forEach((item) => item.setAttribute('aria-selected', String(item === option)));
+        nativeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        close(true);
+      };
+
+      trigger.addEventListener('click', () => {
+        if (listbox.hidden) open();
+        else close();
+      });
+      trigger.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          if (listbox.hidden) {
+            open(event.key === 'ArrowDown' ? activeIndex : activeIndex - 1);
+          } else {
+            setActive(activeIndex + (event.key === 'ArrowDown' ? 1 : -1));
+          }
+        } else if (event.key === 'Home' && !listbox.hidden) {
+          event.preventDefault();
+          setActive(0);
+        } else if (event.key === 'End' && !listbox.hidden) {
+          event.preventDefault();
+          setActive(options.length - 1);
+        } else if ((event.key === 'Enter' || event.key === ' ') && listbox.hidden) {
+          event.preventDefault();
+          open();
+        } else if ((event.key === 'Enter' || event.key === ' ') && !listbox.hidden) {
+          event.preventDefault();
+          choose(options[activeIndex]);
+        } else if (event.key === 'Escape' && !listbox.hidden) {
+          event.preventDefault();
+          close();
+        } else if (event.key === 'Tab' && !listbox.hidden) {
+          close();
+        }
+      });
+      options.forEach((option, index) => {
+        option.addEventListener('mouseenter', () => setActive(index));
+        option.addEventListener('click', () => choose(option));
+      });
+      document.addEventListener('click', (event) => {
+        if (!wrapper.contains(event.target as Node)) close();
+      });
+    });
+
+    const runButton = project.querySelector<HTMLButtonElement>('[data-run]');
+    const output = project.querySelector<HTMLElement>('[data-output]');
+    const topicSelect = project.querySelector<HTMLSelectElement>('[data-topic]');
+    const paperSelect = project.querySelector<HTMLSelectElement>('[data-paper]');
+    runButton?.addEventListener('click', () => {
+      if (!runButton || !output || !topicSelect || !paperSelect) return;
+      runButton.disabled = true;
+      const topicLabel = Object.entries(labels.topics).find(([value]) => value === topicSelect.value)?.[1] ?? topicSelect.value;
+      output.textContent = `${labels.running}\n[INFO] ${labels.queryMapped}: "${topicLabel}"`;
+      const lines = [
+        `[INFO] ${labels.fetching}: ${paperSelect.selectedOptions[0]?.textContent ?? ''}…`,
+        `[INFO] ${labels.extracting}…`,
+        `[INFO] ${labels.evaluating}…`,
+      ];
+      lines.forEach((line, index) => {
+        window.setTimeout(() => {
+          output.textContent += `\n${line}`;
+        }, (index + 1) * 450);
+      });
+      window.setTimeout(() => {
+        const topic = topicSelect.value;
+        const paper = paperSelect.value;
+        const strongRag = topic === 'rag' && paper === 'paper1';
+        const strongQuant = topic === 'quant' && paper === 'paper3';
+        const score = strongRag ? '0.96' : strongQuant ? '0.91' : '0.48';
+        const rationale = strongRag ? labels.strongRag : strongQuant ? labels.strongQuant : labels.low;
+        const scoreValue = document.createElement('strong');
+        scoreValue.textContent = `${score} / 1.00`;
+        output.append(`\n\n${labels.complete}\n${labels.score}: `, scoreValue, `\n${labels.rationale}: ${rationale}`);
+        runButton.disabled = false;
+      }, 1900);
+    });
+  }
+</script>
