@@ -2,7 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 import EntryRow from '../../../components/EntryRow.astro';
 import { langs, ui, sections, type Lang } from '../../../i18n/ui';
-import { sectionEntries, entryHref } from '../../../lib/content';
+import { sectionEntries, entryHref, entryText } from '../../../lib/content';
 
 export function getStaticPaths() {
   return langs.flatMap((lang) => sections.map((section) => ({ params: { lang, section: section.slug } })));
@@ -24,17 +24,20 @@ const entries = await sectionEntries(section.collection);
 
   <section class="wrap">
     {
-      entries.map((entry, i) => (
-        <EntryRow
-          label={`0${i + 1}`}
-          title={entry.data.title}
-          summary={entry.data.summary}
-          status={entry.data.status}
-          statusLabel={t.status[entry.data.status]}
-          href={entryHref(lang, section, entry)}
-          note={entry.data.lang && entry.data.lang !== lang ? t.ui.onlyIn(entry.data.lang) : undefined}
-        />
-      ))
+      entries.map((entry, i) => {
+        const text = entryText(lang, entry);
+        return (
+          <EntryRow
+            label={`0${i + 1}`}
+            title={text.title}
+            summary={text.summary}
+            status={entry.data.status}
+            statusLabel={t.status[entry.data.status]}
+            href={entryHref(lang, section, entry)}
+            note={entry.data.lang && entry.data.lang !== lang ? t.ui.onlyIn(entry.data.lang) : undefined}
+          />
+        );
+      })
     }
   </section>
 </Base>

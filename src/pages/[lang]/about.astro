@@ -12,6 +12,7 @@ const t = ui[lang];
 // TODO Diana: put your CV in /public (for example cv.pdf) and set this to '/cv.pdf'.
 // While it is null, the download link is not shown.
 const cvUrl: string | null = null;
+const linkedinUrl = 'https://www.linkedin.com/in/diana-gyurjiyan-688071129/';
 
 // TODO Diana: put a portrait in /public (for example portrait.jpg) and set this to '/portrait.jpg'.
 // While it is null, a placeholder block is shown.
@@ -28,15 +29,110 @@ const portraitUrl: string | null = null;
         {portraitUrl ? <img src={portraitUrl} alt={t.siteTitle} /> : <span>{t.about.portrait}</span>}
       </div>
       <div>
-        <p class="lede" style="margin-top:0">{t.about.intro}</p>
+        <div class="about-copy">
+          {t.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
         <dl class="facts">
           <div><dt>{t.about.factFocus}</dt><dd>{t.about.factValue}</dd></div>
-          <div><dt>{t.about.factResearch}</dt><dd>{t.about.factValue}</dd></div>
-          <div><dt>{t.about.factBased}</dt><dd>{t.about.factValue}</dd></div>
-          {/* TODO Diana: do you want a contact address here? Add one more <div><dt>…</dt><dd>…</dd></div> row. */}
+          <div><dt>{t.about.factResearch}</dt><dd>{t.about.factResearchValue}</dd></div>
+          <div><dt>{t.about.factBased}</dt><dd>{t.about.location}</dd></div>
         </dl>
+        <a class="link" href={linkedinUrl} target="_blank" rel="noopener noreferrer">{t.about.linkedin} ↗</a>
         {cvUrl && <a class="link" href={cvUrl}>{t.about.cv} ↓</a>}
       </div>
     </div>
   </section>
+  <section class="wrap about-details">
+    <div>
+      <div class="eyebrow">{t.about.experienceTitle}</div>
+      {t.about.experiences.map(([period, role, description]) => (
+        <article class="about-experience">
+          <span>{period}</span>
+          <div>
+            <h2>{role}</h2>
+            <p>{description}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+    <aside class="about-toolkit">
+      <div class="eyebrow">{t.about.researchTitle}</div>
+      <p>{t.about.research}</p>
+      <p class="skills">{t.about.skills}</p>
+    </aside>
+  </section>
 </Base>
+
+<style>
+  .about-copy {
+    max-width: 68ch;
+    color: var(--mu);
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .about-copy p + p {
+    margin-top: 1.1em;
+  }
+  .about-details {
+    display: grid;
+    gap: 48px;
+  }
+  .about-experience {
+    display: grid;
+    grid-template-columns: 82px minmax(0, 1fr);
+    gap: 16px;
+    padding: 20px 0;
+    border-top: 1px solid var(--ln);
+  }
+  .about-experience:last-child {
+    border-bottom: 1px solid var(--ln);
+  }
+  .about-experience > span {
+    padding-top: 3px;
+    color: var(--ac);
+    font-size: 13px;
+  }
+  .about-experience h2 {
+    font-size: 25px;
+    line-height: 1.15;
+  }
+  .about-experience p,
+  .about-toolkit > p {
+    margin-top: 8px;
+    color: var(--mu);
+    font-size: 14px;
+  }
+  .about-toolkit {
+    align-self: start;
+    padding: 20px;
+    border: 1px solid var(--ln);
+  }
+  .about-toolkit .eyebrow {
+    margin-bottom: 18px;
+  }
+  .about-toolkit > p {
+    margin-top: 0;
+  }
+  .about-toolkit .skills {
+    padding-top: 16px;
+    margin-top: 18px;
+    border-top: 1px solid var(--ln);
+    color: var(--ink);
+    line-height: 1.8;
+  }
+  @media (min-width: 900px) {
+    .about-details {
+      grid-template-columns: minmax(0, 7fr) minmax(240px, 5fr);
+      gap: 56px;
+    }
+  }
+  @media (max-width: 500px) {
+    .about-experience {
+      grid-template-columns: 64px minmax(0, 1fr);
+      gap: 12px;
+    }
+    .about-experience h2 {
+      font-size: 22px;
+    }
+  }
+</style>

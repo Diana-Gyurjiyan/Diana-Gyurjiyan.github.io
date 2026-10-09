@@ -1,8 +1,9 @@
 ---
 import { render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
+import NoesisProject from '../../../components/NoesisProject.astro';
 import { langs, ui, sections, type Lang } from '../../../i18n/ui';
-import { sectionEntries } from '../../../lib/content';
+import { sectionEntries, entryText } from '../../../lib/content';
 
 // Pages are only built for items that are no longer "forthcoming".
 export async function getStaticPaths() {
@@ -24,21 +25,28 @@ const section = sections.find((s) => s.slug === Astro.params.section)!;
 const { entry } = Astro.props;
 const t = ui[lang];
 const { Content } = await render(entry);
+const text = entryText(lang, entry);
 const dateFormat = new Intl.DateTimeFormat(lang === 'nl' ? 'nl-NL' : 'en-GB', { dateStyle: 'long' });
 ---
 
-<Base lang={lang} title={entry.data.title} description={entry.data.summary}>
-  <article class="wrap">
-    <div class="eyebrow"><a href={`/${lang}/${section.slug}/`} style="text-decoration:none">← {t.nav[section.nav]}</a></div>
-    <h1 class="page-title">{entry.data.title}</h1>
-    <div class="article-meta">
-      <span class="pill">{t.status[entry.data.status]}</span>
-      <time datetime={entry.data.date.toISOString()}>{dateFormat.format(entry.data.date)}</time>
-      {entry.data.tags.map((tag) => <span>#{tag}</span>)}
-      {entry.data.lang && entry.data.lang !== lang && <span>{t.ui.onlyIn(entry.data.lang)}</span>}
-    </div>
-    <div class="prose">
-      <Content />
-    </div>
-  </article>
+<Base lang={lang} title={text.title} description={text.summary}>
+  {
+    entry.id === 'noesis' ? (
+      <NoesisProject lang={lang} statusLabel={t.status[entry.data.status]} date={dateFormat.format(entry.data.date)} dateISO={entry.data.date.toISOString()} />
+    ) : (
+      <article class="wrap">
+        <div class="eyebrow"><a href={`/${lang}/${section.slug}/`} style="text-decoration:none">← {t.nav[section.nav]}</a></div>
+        <h1 class="page-title">{text.title}</h1>
+        <div class="article-meta">
+          <span class="pill">{t.status[entry.data.status]}</span>
+          <time datetime={entry.data.date.toISOString()}>{dateFormat.format(entry.data.date)}</time>
+          {entry.data.tags.map((tag) => <span>#{tag}</span>)}
+          {entry.data.lang && entry.data.lang !== lang && <span>{t.ui.onlyIn(entry.data.lang)}</span>}
+        </div>
+        <div class="prose">
+          <Content />
+        </div>
+      </article>
+    )
+  }
 </Base>

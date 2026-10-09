@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import EntryRow from '../../components/EntryRow.astro';
 import { langs, ui, sections, type Lang } from '../../i18n/ui';
-import { sectionEntries, entryHref } from '../../lib/content';
+import { sectionEntries, entryHref, entryText } from '../../lib/content';
 
 export function getStaticPaths() {
   return langs.map((lang) => ({ params: { lang } }));
@@ -37,19 +37,21 @@ const highlights = await Promise.all(
   <section class="wrap">
     <div class="eyebrow">{t.home.highlights}</div>
     {
-      highlights.map(({ section, entry }, i) =>
-        entry ? (
+      highlights.map(({ section, entry }, i) => {
+        if (!entry) return null;
+        const text = entryText(lang, entry);
+        return (
           <EntryRow
             label={`0${i + 1} ${t.nav[section.nav]}`}
             labelHref={`/${lang}/${section.slug}/`}
-            title={entry.data.title}
-            summary={entry.data.summary}
+            title={text.title}
+            summary={text.summary}
             status={entry.data.status}
             statusLabel={t.status[entry.data.status]}
             href={entryHref(lang, section, entry)}
           />
-        ) : null
-      )
+        );
+      })
     }
   </section>
 </Base>

@@ -6,6 +6,8 @@ import { glob } from 'astro/loaders';
 const entry = z.object({
   title: z.string(),
   summary: z.string(),
+  title_nl: z.string().optional(),
+  summary_nl: z.string().optional(),
   date: z.coerce.date(),
   status: z.enum(['forthcoming', 'in-progress', 'published']).default('forthcoming'),
   tags: z.array(z.string()).default([]),
