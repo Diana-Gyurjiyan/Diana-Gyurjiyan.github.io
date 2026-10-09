@@ -2,3 +2,30 @@ node_modules/
 dist/
 .astro/
 .DS_Store
+
+# Local editors and IDEs
+.idea/
+.vscode/
+*.code-workspace
+
+# Local Python environments and generated files
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environment variables and secrets
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.swo
