@@ -1,0 +1,42 @@
+---
+import Base from '../../layouts/Base.astro';
+import { langs, ui, type Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return langs.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const t = ui[lang];
+
+// TODO Diana: put your CV in /public (for example cv.pdf) and set this to '/cv.pdf'.
+// While it is null, the download link is not shown.
+const cvUrl: string | null = null;
+
+// TODO Diana: put a portrait in /public (for example portrait.jpg) and set this to '/portrait.jpg'.
+// While it is null, a placeholder block is shown.
+const portraitUrl: string | null = null;
+---
+
+<Base lang={lang} title={t.about.label} description={t.about.intro}>
+  <section class="wrap">
+    <div class="eyebrow">{t.about.label}</div>
+    <h1 class="page-title">{t.about.title}</h1>
+
+    <div class="about">
+      <div class="portrait">
+        {portraitUrl ? <img src={portraitUrl} alt={t.siteTitle} /> : <span>{t.about.portrait}</span>}
+      </div>
+      <div>
+        <p class="lede" style="margin-top:0">{t.about.intro}</p>
+        <dl class="facts">
+          <div><dt>{t.about.factFocus}</dt><dd>{t.about.factValue}</dd></div>
+          <div><dt>{t.about.factResearch}</dt><dd>{t.about.factValue}</dd></div>
+          <div><dt>{t.about.factBased}</dt><dd>{t.about.factValue}</dd></div>
+          {/* TODO Diana: do you want a contact address here? Add one more <div><dt>…</dt><dd>…</dd></div> row. */}
+        </dl>
+        {cvUrl && <a class="link" href={cvUrl}>{t.about.cv} ↓</a>}
+      </div>
+    </div>
+  </section>
+</Base>

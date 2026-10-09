@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Diana Gyurjiyan</title>
+    <meta name="robots" content="noindex" />
+    <noscript><meta http-equiv="refresh" content="0; url=/en/" /></noscript>
+    <!-- Language choice: a manual choice (saved by the language switch) wins,
+         otherwise the first language in the browser settings that is Dutch or English. -->
+    <script is:inline>
+      (function () {
+        var lang = null;
+        try { lang = localStorage.getItem('lang'); } catch (e) {}
+        if (lang !== 'nl' && lang !== 'en') {
+          var prefs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en'];
+          lang = 'en';
+          for (var i = 0; i < prefs.length; i++) {
+            var code = String(prefs[i]).toLowerCase().slice(0, 2);
+            if (code === 'nl') { lang = 'nl'; break; }
+            if (code === 'en') { break; }
+          }
+        }
+        location.replace('/' + lang + '/' + location.search + location.hash);
+      })();
+    </script>
+  </head>
+  <body>
+    <p><a href="/en/">English</a> · <a href="/nl/">Nederlands</a></p>
+  </body>
+</html>

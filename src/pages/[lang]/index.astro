@@ -1,0 +1,55 @@
+---
+import Base from '../../layouts/Base.astro';
+import EntryRow from '../../components/EntryRow.astro';
+import { langs, ui, sections, type Lang } from '../../i18n/ui';
+import { sectionEntries, entryHref } from '../../lib/content';
+
+export function getStaticPaths() {
+  return langs.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const t = ui[lang];
+
+// One highlight per section: the newest item.
+const highlights = await Promise.all(
+  sections.map(async (section) => {
+    const [entry] = await sectionEntries(section.collection);
+    return { section, entry };
+  })
+);
+---
+
+<Base lang={lang} hero>
+  <section class="hero">
+    <div class="hero-inner">
+      <h1><span>Diana</span><span>Gyurjiyan</span></h1>
+      <p>{t.tagline}</p>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="eyebrow">{t.home.aboutLabel}</div>
+    <p class="lede" style="margin-top:0">{t.about.intro}</p>
+    <a class="link" href={`/${lang}/about/`}>{t.home.aboutMore} →</a>
+  </section>
+
+  <section class="wrap">
+    <div class="eyebrow">{t.home.highlights}</div>
+    {
+      highlights.map(({ section, entry }, i) =>
+        entry ? (
+          <EntryRow
+            label={`0${i + 1} ${t.nav[section.nav]}`}
+            labelHref={`/${lang}/${section.slug}/`}
+            title={entry.data.title}
+            summary={entry.data.summary}
+            status={entry.data.status}
+            statusLabel={t.status[entry.data.status]}
+            href={entryHref(lang, section, entry)}
+          />
+        ) : null
+      )
+    }
+  </section>
+</Base>

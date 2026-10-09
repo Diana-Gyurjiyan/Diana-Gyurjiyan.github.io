@@ -1,0 +1,25 @@
+---
+interface Props {
+  label?: string;
+  labelHref?: string;
+  title: string;
+  summary: string;
+  status: string;
+  statusLabel: string;
+  href?: string;
+  note?: string;
+}
+const { label, labelHref, title, summary, status, statusLabel, href, note } = Astro.props;
+---
+
+<article class="entry">
+  <div class="entry-meta">
+    {label && (labelHref ? <a href={labelHref}>{label}</a> : <span>{label}</span>)}
+    <span class={`pill pill-${status}`}>{statusLabel}</span>
+  </div>
+  <div class="entry-body">
+    <h3>{href ? <a href={href}>{title}</a> : title}</h3>
+    <p>{summary}</p>
+    {note && <p class="note">{note}</p>}
+  </div>
+</article>
