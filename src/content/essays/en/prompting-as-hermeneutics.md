@@ -1,11 +1,11 @@
 ---
-title: "Deterministic Evaluation for Ambiguous Language"
+title: "Prompting as Hermeneutics: The Subject and the Context Window"
 summary:
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
   labore et dolore magna aliqua."
-date: 2026-10-08
+date: 2026-10-09
 status: forthcoming
-tags: [evaluation, testing]
+tags: [hermeneutics, prompting]
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore

@@ -463,6 +463,77 @@ main {
   border-left: 1px solid var(--ac);
   font: italic 400 24px/1.4 var(--serif);
 }
+.prose .essay-diagram {
+  margin: 2.5em 0;
+  padding: clamp(20px, 4vw, 36px);
+  border: 1px solid var(--ln);
+  background: color-mix(in srgb, var(--blk) 5%, var(--bg));
+}
+.essay-diagram figcaption {
+  margin-bottom: 24px;
+  color: var(--ac);
+  font: 400 clamp(25px, 3.5vw, 34px)/1.1 var(--serif);
+  text-align: center;
+}
+.essay-flow {
+  max-width: 620px;
+  margin-inline: auto;
+}
+.essay-node {
+  display: grid;
+  gap: 5px;
+  padding: 17px 20px;
+  border: 1px solid var(--ln);
+  border-left: 3px solid var(--ac);
+  background: var(--bg);
+}
+.essay-node-kicker {
+  color: var(--ac);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.essay-node strong {
+  font: 400 22px/1.15 var(--serif);
+}
+.essay-node > span:last-child {
+  color: var(--mu);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.essay-node-facade {
+  border-left-color: #a56e37;
+}
+.essay-node-facade .essay-node-kicker {
+  color: #a56e37;
+}
+.essay-node-agent {
+  border-left-color: #607f99;
+}
+.essay-node-agent .essay-node-kicker {
+  color: #607f99;
+}
+.essay-node-outcome {
+  border-left-color: #9b4d55;
+}
+.essay-node-outcome .essay-node-kicker {
+  color: #9b4d55;
+}
+.essay-connector {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 9px 12px;
+  color: var(--mu);
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+}
+.essay-connector i {
+  color: var(--ac);
+  font: normal 20px/1 var(--sans);
+}
 
 /* ---------- Footer ---------- */
 .foot {

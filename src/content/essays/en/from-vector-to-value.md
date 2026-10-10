@@ -1,11 +1,11 @@
 ---
-title: "Deterministic Evaluation for Ambiguous Language"
+title: "From Vector to Value: Why LLMs Do Not 'Understand' Meaning"
 summary:
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
   labore et dolore magna aliqua."
-date: 2026-10-08
+date: 2026-10-07
 status: forthcoming
-tags: [evaluation, testing]
+tags: [meaning, llm]
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore

@@ -1,5 +1,5 @@
 ---
-import { render } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import NoesisProject from '../../../components/NoesisProject.astro';
 import ElenchosProject from '../../../components/ElenchosProject.astro';
@@ -14,7 +14,15 @@ export async function getStaticPaths() {
       const entries = await sectionEntries(section.collection);
       for (const entry of entries) {
         if (entry.data.status === 'forthcoming') continue;
-        paths.push({ params: { lang, section: section.slug, slug: entry.id }, props: { entry } });
+        const slug = entry.id.split('/').at(-1)!;
+        const translatedEntry = lang === 'nl'
+          ? await getCollection(section.collection, ({ id }) => id === `nl/${slug}`)
+          : [];
+        const englishEntry = lang === 'en'
+          ? await getCollection(section.collection, ({ id }) => id === `en/${slug}`)
+          : [];
+        const localizedEntry = translatedEntry[0] ?? englishEntry[0] ?? entry;
+        paths.push({ params: { lang, section: section.slug, slug }, props: { entry: localizedEntry } });
       }
     }
   }
@@ -46,10 +54,16 @@ const dateFormat = new Intl.DateTimeFormat(lang === 'nl' ? 'nl-NL' : 'en-GB', { 
           {entry.data.tags.map((tag) => <span>#{tag}</span>)}
           {entry.data.lang && entry.data.lang !== lang && <span>{t.ui.onlyIn(entry.data.lang)}</span>}
         </div>
-        <div class="prose">
+        <div class="prose" data-content-lang={lang}>
           <Content />
         </div>
       </article>
     )
   }
 </Base>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.prose[data-content-lang="nl"] [data-footnotes] > h2').forEach((heading) => {
+    heading.textContent = 'Voetnoten';
+  });
+</script>

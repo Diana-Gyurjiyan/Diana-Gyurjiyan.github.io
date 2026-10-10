@@ -1,11 +1,11 @@
 ---
-title: "Deterministic Evaluation for Ambiguous Language"
+title: "The Translator’s Subjectivity: Why Pure LLMs Flatten Cultural Context"
 summary:
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
   labore et dolore magna aliqua."
-date: 2026-10-08
+date: 2026-10-06
 status: forthcoming
-tags: [evaluation, testing]
+tags: [translation, ricoeur]
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore

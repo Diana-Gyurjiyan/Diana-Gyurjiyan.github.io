@@ -69,7 +69,10 @@ const en = {
   },
   sections: {
     research: { title: 'Research', intro: LOREM_SHORT },
-    essays: { title: 'Essays', intro: LOREM_SHORT },
+    essays: {
+      title: 'Essays',
+      intro: 'Personal essays that revisit ideas from my earlier research and explore what they mean for AI, technology, philosophy, and the way we live and work.',
+    },
     blocks: {
       title: 'Building blocks',
       intro: 'Research is most useful when its ideas can be put to work. These building blocks turn insights into practical, reusable tools for engineers and researchers; helping them move from question to experiment, and from experiment to result, with less friction.',
@@ -141,7 +144,10 @@ const nl: typeof en = {
   },
   sections: {
     research: { title: 'Onderzoek', intro: LOREM_SHORT },
-    essays: { title: 'Essays', intro: LOREM_SHORT },
+    essays: {
+      title: 'Essays',
+      intro: 'Persoonlijke essays waarin ik voortbouw op ideeën uit eerder onderzoek en verken wat ze betekenen voor KI, technologie, filosofie en de manier waarop we leven en werken.',
+    },
     blocks: {
       title: 'Bouwstenen',
       intro: 'Onderzoek wordt pas echt waardevol wanneer je de ideeën kunt toepassen. Deze bouwstenen vertalen academische inzichten naar praktische, herbruikbare hulpmiddelen voor engineers en onderzoekers. Zo kunnen zij met minder omwegen van vraag naar experiment en van experiment naar resultaat werken.',
