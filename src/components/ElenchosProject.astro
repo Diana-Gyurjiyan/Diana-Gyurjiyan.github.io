@@ -1,0 +1,764 @@
+---
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  statusLabel: string;
+  date: string;
+  dateISO: string;
+}
+
+const { lang, statusLabel, date, dateISO } = Astro.props;
+const copy = lang === 'nl'
+  ? {
+      back: '← Bouwstenen',
+      title: 'Elenchos',
+      pronunciation: '/ˈɛl.ɛŋ.kɒs/',
+      tagline: 'Een agentic argumentchecker die logische geldigheid beoordeelt, drogredenen herkent en de houdbaarheid van claims onderzoekt.',
+      openSource: 'Open source',
+      workflow: 'Agentic logica-verificatie',
+      github: 'Bekijk op GitHub ↗',
+      clone: 'Kopieer git clone-commando',
+      copied: 'Gekopieerd',
+      copyFailed: 'Kopiëren mislukt',
+      tabs: ['Probleem & aanpak', 'Architectuur', 'Roadmap', 'Simulator'],
+      problemTitle: 'Waarom argumenten verifiëren?',
+      problemText: 'Geautomatiseerde tekst en AI-modellen produceren steeds meer vloeiende teksten. Achter die overtuigende formuleringen kunnen drogredenen, ongefundeerde redeneersprongen en retorische trucs schuilgaan.',
+      problemDetail: 'Elenchos is vernoemd naar de Socratische methode van kritisch onderzoek. Het project ontleedt argumenten in premissen, toetst claims en maakt zichtbaar waar de redenering wel of niet standhoudt.',
+      focusTitle: 'Waar Elenchos op let',
+      focus: [
+        ['Premissen extraheren', 'Brengt expliciete en impliciete aannames in kaart.'],
+        ['Drogredenen herkennen', 'Classificeert redeneerfouten en retorische trucs.'],
+        ['Redeneringen beoordelen', 'Onderscheidt deductieve geldigheid van inductieve overtuigingskracht.'],
+      ],
+      promiseTitle: 'Van overtuigende tekst naar toetsbare redenering',
+      promise: 'Elenchos vervangt oppervlakkige overtuigingskracht door structurele kritiek, met uitlegbare argumenten en controleerbare auditsporen.',
+      architectureTitle: 'Agentic architectuur',
+      architectureIntro: 'De evaluatie verloopt in vier gestructureerde stappen:',
+      steps: [
+        ['01 — Ontleden', 'Haalt afzonderlijke claims, aannames en conclusies uit de tekst.'],
+        ['02 — Formuleren', 'Zet argumenten om in premissen en afhankelijkheden.'],
+        ['03 — Kritisch toetsen', 'Controleert formele en informele drogredenen.'],
+        ['04 — Rapporteren', 'Geeft een oordeel over de redenering met uitleg en tegenargumenten.'],
+      ],
+      jsonLabel: 'Voorbeeld van een gestructureerd evaluatieresultaat (JSON)',
+      copyJson: 'Kopieer JSON',
+      jsonCopied: 'JSON gekopieerd',
+      roadmapTitle: 'Roadmap',
+      roadmapIntro: 'Elenchos is in actieve ontwikkeling. Dit zijn de volgende richtingen:',
+      roadmap: [
+        ['In ontwikkeling', 'Dialectische multi-agentdebatten', 'Een voorstander en criticus toetsen argumenten vanuit verschillende perspectieven.'],
+        ['Gepland', 'Feitelijke onderbouwing met RAG', 'Literatuur ophalen om premissen te vergelijken met empirisch onderzoek en data.'],
+        ['Op de roadmap', 'Symbolische logica', 'Natuurlijke taal vertalen naar predicatenlogica voor formele bewijscontrole.'],
+      ],
+      simulatorTitle: 'Argumentanalyse simuleren',
+      simulatorIntro: 'Kies een voorbeeld of voer zelf een argument in. De simulator toont een gesimuleerde analyse; er wordt geen live model aangeroepen.',
+      presetLabel: 'Voorbeeldargumenten',
+      presets: ['Hellend vlak', 'Ad hominem', 'Geldige deductie'],
+      placeholder: 'Voer een argument of claim in om te beoordelen…',
+      run: 'Voer analyse uit',
+      ready: 'GEREED',
+      evaluating: 'ANALYSE BEZIG…',
+      complete: 'ANALYSE VOLTOOID',
+      idle: 'Kies een voorbeeld of voer hierboven een tekst in en start de analyse.',
+      empty: 'Voer eerst een argument in om te analyseren.',
+      started: '[INFO] Elenchos-argumentverificatie wordt gestart…',
+      parsing: '[0.1s] Claims en aannames afbakenen…',
+      structuring: '[0.4s] Afhankelijkheden tussen premissen structureren…',
+      scanning: '[0.8s] Controleren op formele en informele drogredenen…',
+      score: 'Geldigheidsscore',
+      statusInvalid: 'LOGISCH GEBREKKIG',
+      statusFallacy: 'INFORMELE DROGREDEN',
+      statusValid: 'DEDUCTIEF GELDIG',
+      fallacy: 'Patroon',
+      rationale: 'Toelichting',
+      slippery: 'Hellend-vlakdrogreden',
+      adHominem: 'Ad hominem',
+      validSyllogism: 'Geen (geldige syllogisme)',
+      slipperyExplanation: 'De redenering voorspelt een extreme keten van gevolgen zonder de tussenliggende causale stappen te onderbouwen.',
+      adHominemExplanation: 'De claim wordt verworpen op basis van de achtergrond van de spreker, niet op basis van het bewijs.',
+      validExplanation: 'De conclusie volgt noodzakelijk uit de twee gegeven premissen.',
+      builtBy: 'Een onderzoeksprototype van',
+    }
+  : {
+      back: '← Building blocks',
+      title: 'Elenchos',
+      pronunciation: '/ˈɛl.ɛŋ.kɒs/',
+      tagline: 'An agentic argument checker for evaluating logical validity, identifying fallacies, and examining claim soundness.',
+      openSource: 'Open source',
+      workflow: 'Agentic logic verification',
+      github: 'View on GitHub ↗',
+      clone: 'Copy git clone command',
+      copied: 'Copied',
+      copyFailed: 'Copy failed',
+      tabs: ['Problem & approach', 'Architecture', 'Roadmap', 'Simulator'],
+      problemTitle: 'Why verify arguments?',
+      problemText: 'Automated text pipelines and AI models produce increasing volumes of fluent content. Behind persuasive wording, that content can hide fallacies, unsupported leaps in reasoning, and rhetorical tricks.',
+      problemDetail: 'Named after the Socratic method of examination, Elenchos breaks arguments into premises, tests claims, and makes clear where reasoning does or does not hold up.',
+      focusTitle: 'What Elenchos examines',
+      focus: [
+        ['Extract premises', 'Maps explicit and implicit assumptions.'],
+        ['Identify fallacies', 'Classifies reasoning flaws and rhetorical tactics.'],
+        ['Evaluate reasoning', 'Distinguishes deductive validity from inductive strength.'],
+      ],
+      promiseTitle: 'From persuasive text to testable reasoning',
+      promise: 'Elenchos replaces surface fluency with structural critique, supported by explainable reasoning and auditable trails.',
+      architectureTitle: 'Agentic architecture',
+      architectureIntro: 'The evaluation pipeline follows four structured stages:',
+      steps: [
+        ['01 — Parse', 'Extracts discrete claims, assumptions, and conclusions from text.'],
+        ['02 — Formalize', 'Converts arguments into premises and dependencies.'],
+        ['03 — Critique', 'Checks for formal and informal fallacies.'],
+        ['04 — Report', 'Returns an assessment of the reasoning with explanations and counter-arguments.'],
+      ],
+      jsonLabel: 'Example of a structured evaluation result (JSON)',
+      copyJson: 'Copy JSON',
+      jsonCopied: 'JSON copied',
+      roadmapTitle: 'Roadmap',
+      roadmapIntro: 'Elenchos is in active development. These are the next directions:',
+      roadmap: [
+        ['In development', 'Dialectical multi-agent debates', 'A proponent and a critic test arguments from different perspectives.'],
+        ['Planned', 'RAG factual grounding', 'Retrieve literature to compare premises against empirical research and data.'],
+        ['On the roadmap', 'Symbolic logic', 'Translate natural language into predicate logic for formal proof checking.'],
+      ],
+      simulatorTitle: 'Simulate argument analysis',
+      simulatorIntro: 'Choose a sample or enter an argument. The simulator displays a mock analysis; no live model is called.',
+      presetLabel: 'Sample arguments',
+      presets: ['Slippery slope', 'Ad hominem', 'Valid deduction'],
+      placeholder: 'Enter an argument or claim to evaluate…',
+      run: 'Run analysis',
+      ready: 'READY',
+      evaluating: 'EVALUATING…',
+      complete: 'ANALYSIS COMPLETE',
+      idle: 'Choose a sample or enter text above, then start the analysis.',
+      empty: 'Enter an argument before running the analysis.',
+      started: '[INFO] Initializing Elenchos argument verification…',
+      parsing: '[0.1s] Parsing claim boundaries and assumptions…',
+      structuring: '[0.4s] Structuring premise dependencies…',
+      scanning: '[0.8s] Checking formal and informal fallacies…',
+      score: 'Validity score',
+      statusInvalid: 'LOGICALLY FLAWED',
+      statusFallacy: 'INFORMAL FALLACY',
+      statusValid: 'DEDUCTIVELY VALID',
+      fallacy: 'Pattern',
+      rationale: 'Rationale',
+      slippery: 'Slippery slope',
+      adHominem: 'Ad hominem',
+      validSyllogism: 'None (valid syllogism)',
+      slipperyExplanation: 'The argument predicts an extreme chain of events without supporting the intermediate causal links.',
+      adHominemExplanation: 'The claim is dismissed based on the speaker’s background rather than the evidence.',
+      validExplanation: 'The conclusion follows necessarily from the two stated premises.',
+      builtBy: 'A research prototype by',
+    };
+
+const cloneCommand = 'git clone https://github.com/Diana-Gyurjiyan/elenchos.git';
+const jsonOutput = `{
+  "argument_id": "arg_908122",
+  "validity_status": "LOGICALLY_INVALID",
+  "soundness_score": 0.32,
+  "extracted_premises": [
+    "P1: Policy X is proposed by candidate Y.",
+    "P2: Candidate Y has a flawed personal history."
+  ],
+  "detected_fallacies": [
+    {
+      "type": "Ad Hominem",
+      "explanation": "Attacks the proponent rather than evaluating the merits of Policy X."
+    }
+  ],
+  "recommended_counterframe": "Separate the policy metrics from candidate history."
+}`;
+---
+
+<article class="elenchos wrap" data-elenchos data-lang={lang} data-clone={cloneCommand} data-json={jsonOutput}>
+  <div class="eyebrow"><a href={`/${lang}/building-blocks/`} class="back-link">{copy.back}</a></div>
+
+  <header class="project-header">
+    <div class="project-meta">
+      <span class="pill">{statusLabel}</span>
+      <time datetime={dateISO}>{date}</time>
+      <span>{copy.openSource}</span>
+      <span>{copy.workflow}</span>
+    </div>
+    <h1 class="page-title">{copy.title} <span class="pronunciation">{copy.pronunciation}</span></h1>
+    <p class="lede">{copy.tagline}</p>
+    <div class="project-actions">
+      <a class="project-link" href="https://github.com/Diana-Gyurjiyan/elenchos" target="_blank" rel="noopener noreferrer">{copy.github}</a>
+      <button class="text-button" type="button" data-copy="clone">{copy.clone}</button>
+      <span class="copy-status" data-copy-status aria-live="polite"></span>
+    </div>
+  </header>
+
+  <nav class="project-tabs" aria-label={lang === 'nl' ? 'Elenchos-onderdelen' : 'Elenchos sections'} role="tablist">
+    {copy.tabs.map((label, i) => (
+      <button
+        type="button"
+        id={`elenchos-tab-${i}`}
+        class="project-tab"
+        role="tab"
+        aria-selected={i === 0 ? 'true' : 'false'}
+        aria-controls={`elenchos-panel-${i}`}
+        tabindex={i === 0 ? 0 : -1}
+        data-tab={i}
+      >{label}</button>
+    ))}
+  </nav>
+
+  <section class="project-panel" id="elenchos-panel-0" role="tabpanel" aria-labelledby="elenchos-tab-0" data-panel="0">
+    <div class="section-heading">
+      <p class="eyebrow">{copy.tabs[0]}</p>
+      <h2>{copy.problemTitle}</h2>
+      <p>{copy.problemText}</p>
+      <p>{copy.problemDetail}</p>
+    </div>
+    <h3 class="subheading">{copy.focusTitle}</h3>
+    <div class="card-grid">
+      {copy.focus.map(([title, description], i) => (
+        <article class="plain-card">
+          <span class="card-number">0{i + 1}</span>
+          <h3>{title}</h3>
+          <p>{description}</p>
+        </article>
+      ))}
+    </div>
+    <div class="project-note">
+      <h3>{copy.promiseTitle}</h3>
+      <p>{copy.promise}</p>
+    </div>
+  </section>
+
+  <section class="project-panel" id="elenchos-panel-1" role="tabpanel" aria-labelledby="elenchos-tab-1" data-panel="1" hidden>
+    <div class="section-heading">
+      <p class="eyebrow">{copy.tabs[1]}</p>
+      <h2>{copy.architectureTitle}</h2>
+      <p>{copy.architectureIntro}</p>
+    </div>
+    <div class="steps">
+      {copy.steps.map(([title, description]) => (
+        <article class="step">
+          <h3>{title}</h3>
+          <p>{description}</p>
+        </article>
+      ))}
+    </div>
+    <div class="json-heading">
+      <h3>{copy.jsonLabel}</h3>
+      <button class="text-button" type="button" data-copy="json">{copy.copyJson}</button>
+    </div>
+    <pre class="json-example"><code>{jsonOutput}</code></pre>
+    <span class="copy-status" data-json-status aria-live="polite"></span>
+  </section>
+
+  <section class="project-panel" id="elenchos-panel-2" role="tabpanel" aria-labelledby="elenchos-tab-2" data-panel="2" hidden>
+    <div class="section-heading">
+      <p class="eyebrow">{copy.tabs[2]}</p>
+      <h2>{copy.roadmapTitle}</h2>
+      <p>{copy.roadmapIntro}</p>
+    </div>
+    <div class="roadmap">
+      {copy.roadmap.map(([status, title, description], i) => (
+        <article class="roadmap-item">
+          <div class="roadmap-index">0{i + 1}</div>
+          <div>
+            <div class="roadmap-meta"><span class="pill">{status}</span></div>
+            <h3>{title}</h3>
+            <p>{description}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="project-panel" id="elenchos-panel-3" role="tabpanel" aria-labelledby="elenchos-tab-3" data-panel="3" hidden>
+    <div class="section-heading">
+      <p class="eyebrow">{copy.tabs[3]}</p>
+      <h2>{copy.simulatorTitle}</h2>
+      <p>{copy.simulatorIntro}</p>
+    </div>
+    <div class="sim-presets">
+      <span>{copy.presetLabel}</span>
+      <button type="button" data-preset="slippery">{copy.presets[0]}</button>
+      <button type="button" data-preset="ad-hominem">{copy.presets[1]}</button>
+      <button type="button" data-preset="valid">{copy.presets[2]}</button>
+    </div>
+    <textarea data-input rows="4" placeholder={copy.placeholder}></textarea>
+    <div class="sim-actions">
+      <button class="project-link sim-run" type="button" data-run>{copy.run}</button>
+      <span class="sim-status" data-status aria-live="polite">{copy.ready}</span>
+    </div>
+    <div class="sim-output" aria-live="polite" data-output>{copy.idle}</div>
+  </section>
+
+  <footer class="project-footer">
+    <span>{copy.builtBy} <a href="https://github.com/Diana-Gyurjiyan" target="_blank" rel="noopener noreferrer">Diana Gyurjiyan</a>.</span>
+    <span><time datetime={dateISO}>{date}</time></span>
+  </footer>
+</article>
+
+<style>
+  .elenchos {
+    --project-accent: #28785e;
+    padding-top: clamp(38px, 6vw, 72px);
+  }
+  :root[data-theme='dark'] .elenchos {
+    --project-accent: #82c5a6;
+  }
+  .back-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .back-link:hover,
+  .project-footer a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .project-header {
+    padding-bottom: clamp(32px, 5vw, 56px);
+    border-bottom: 1px solid var(--ln);
+  }
+  .project-meta,
+  .project-actions,
+  .roadmap-meta,
+  .sim-presets,
+  .sim-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    color: var(--mu);
+    font-size: 13px;
+  }
+  .project-meta {
+    margin-bottom: 22px;
+  }
+  .project-meta .pill,
+  .roadmap-meta .pill {
+    color: var(--project-accent);
+    border-color: color-mix(in srgb, var(--project-accent) 45%, var(--ln));
+  }
+  .pronunciation {
+    color: var(--project-accent);
+    font: 400 0.4em/1 var(--sans);
+    white-space: nowrap;
+    vertical-align: 0.3em;
+  }
+  .project-actions {
+    margin-top: 24px;
+  }
+  .project-link,
+  .text-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 8px 14px;
+    border: 1px solid var(--project-accent);
+    border-radius: 2px;
+    background: var(--project-accent);
+    color: var(--bg);
+    font: 500 13px/1.3 var(--sans);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .text-button {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--ln);
+  }
+  .project-link:hover,
+  .text-button:hover {
+    opacity: 0.78;
+  }
+  .copy-status {
+    color: var(--mu);
+    font-size: 12px;
+  }
+  .project-tabs {
+    display: flex;
+    gap: clamp(16px, 3vw, 34px);
+    overflow-x: auto;
+    border-bottom: 1px solid var(--ln);
+    margin-top: 10px;
+  }
+  .project-tab {
+    flex: 0 0 auto;
+    padding: 16px 0 12px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: var(--mu);
+    font: 400 17px/1.2 var(--serif);
+    cursor: pointer;
+  }
+  .project-tab[aria-selected='true'] {
+    border-bottom-color: var(--project-accent);
+    color: var(--ink);
+  }
+  .project-panel {
+    padding: clamp(30px, 5vw, 56px) 0;
+  }
+  .section-heading {
+    max-width: 66ch;
+    margin-bottom: 32px;
+  }
+  .section-heading .eyebrow {
+    margin-bottom: 12px;
+  }
+  .section-heading h2,
+  .project-note h3 {
+    font-size: clamp(32px, 4.3cqi, 48px);
+    line-height: 1;
+  }
+  .section-heading > p:last-child,
+  .section-heading > p:nth-last-child(2),
+  .project-note p {
+    margin-top: 14px;
+    color: var(--mu);
+  }
+  .subheading {
+    margin-bottom: 14px;
+    font: 400 24px/1.2 var(--serif);
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--ln);
+    border-bottom: 1px solid var(--ln);
+  }
+  .plain-card {
+    padding: 22px 20px 22px 0;
+  }
+  .plain-card + .plain-card {
+    padding-left: 20px;
+    border-left: 1px solid var(--ln);
+  }
+  .card-number,
+  .roadmap-index {
+    color: var(--project-accent);
+    font-size: 12px;
+  }
+  .plain-card h3,
+  .step h3,
+  .roadmap-item h3,
+  .json-heading h3 {
+    margin-top: 12px;
+    font: 400 21px/1.15 var(--serif);
+  }
+  .plain-card p,
+  .step p,
+  .roadmap-item p {
+    margin-top: 8px;
+    color: var(--mu);
+    font-size: 14px;
+  }
+  .project-note {
+    margin: clamp(34px, 5vw, 56px) 0 0;
+    padding-left: 20px;
+    border-left: 1px solid var(--project-accent);
+  }
+  .project-note h3 {
+    font-size: 30px;
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    margin-bottom: 44px;
+  }
+  .step {
+    padding-top: 14px;
+    border-top: 1px solid var(--project-accent);
+  }
+  .step h3 {
+    margin-top: 0;
+  }
+  .json-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .json-heading h3 {
+    margin: 0;
+  }
+  .json-example {
+    overflow-x: auto;
+    padding: 22px;
+    border: 1px solid var(--ln);
+    background: color-mix(in srgb, var(--blk) 8%, var(--bg));
+    color: var(--ink);
+    font: 400 12px/1.7 ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .roadmap {
+    border-top: 1px solid var(--ln);
+  }
+  .roadmap-item {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 14px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--ln);
+  }
+  .roadmap-index {
+    padding-top: 5px;
+  }
+  .roadmap-item h3 {
+    margin-top: 12px;
+  }
+  .roadmap-item p {
+    max-width: 65ch;
+  }
+  .sim-presets {
+    padding: 18px 0;
+    border-top: 1px solid var(--ln);
+  }
+  .sim-presets button {
+    padding: 5px 9px;
+    border: 1px solid var(--ln);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    cursor: pointer;
+  }
+  .sim-presets button:hover {
+    border-color: var(--project-accent);
+  }
+  textarea {
+    display: block;
+    width: 100%;
+    resize: vertical;
+    padding: 14px;
+    border: 1px solid var(--ln);
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--blk) 5%, var(--bg));
+    color: var(--ink);
+    font: 400 14px/1.65 var(--sans);
+  }
+  textarea:focus {
+    border-color: var(--project-accent);
+  }
+  .sim-actions {
+    justify-content: space-between;
+    margin-top: 18px;
+  }
+  .sim-run:disabled {
+    cursor: wait;
+    opacity: 0.6;
+  }
+  .sim-output {
+    min-height: 100px;
+    margin-top: 18px;
+    padding: 18px;
+    border: 1px solid var(--ln);
+    color: var(--mu);
+    font: 400 13px/1.7 ui-monospace, SFMono-Regular, Menlo, monospace;
+    white-space: pre-wrap;
+  }
+  .sim-output strong {
+    color: var(--ink);
+  }
+  .project-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 20px;
+    padding: 20px 0 8px;
+    border-top: 1px solid var(--ln);
+    color: var(--mu);
+    font-size: 12px;
+  }
+  .project-footer a {
+    color: var(--ink);
+  }
+  @media (max-width: 700px) {
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
+    .plain-card {
+      padding: 18px 0;
+    }
+    .plain-card + .plain-card {
+      padding-left: 0;
+      border-left: 0;
+      border-top: 1px solid var(--ln);
+    }
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .pronunciation {
+      display: block;
+      margin-top: 12px;
+      font-size: 0.35em;
+    }
+  }
+  @media (max-width: 420px) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+    .json-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>
+
+<script>
+  const project = document.querySelector<HTMLElement>('[data-elenchos]');
+
+  if (project) {
+    const lang = project.dataset.lang === 'nl' ? 'nl' : 'en';
+    const labels = lang === 'nl'
+      ? {
+          copied: 'Gekopieerd',
+          copyFailed: 'Kopiëren mislukt',
+          jsonCopied: 'JSON gekopieerd',
+          ready: 'GEREED',
+          evaluating: 'ANALYSE BEZIG…',
+          complete: 'ANALYSE VOLTOOID',
+          empty: 'Voer eerst een argument in om te analyseren.',
+          started: '[INFO] Elenchos-argumentverificatie wordt gestart…',
+          parsing: '[0.1s] Claims en aannames afbakenen…',
+          structuring: '[0.4s] Afhankelijkheden tussen premissen structureren…',
+          scanning: '[0.8s] Controleren op formele en informele drogredenen…',
+          score: 'Geldigheidsscore',
+          fallacy: 'Patroon',
+          rationale: 'Toelichting',
+          invalid: 'LOGISCH GEBREKKIG',
+          informal: 'INFORMELE DROGREDEN',
+          valid: 'DEDUCTIEF GELDIG',
+          slippery: 'Hellend-vlakdrogreden',
+          adHominem: 'Ad hominem',
+          validSyllogism: 'Geen (geldige syllogisme)',
+          slipperyExplanation: 'De redenering voorspelt een extreme keten van gevolgen zonder de tussenliggende causale stappen te onderbouwen.',
+          adHominemExplanation: 'De claim wordt verworpen op basis van de achtergrond van de spreker, niet op basis van het bewijs.',
+          validExplanation: 'De conclusie volgt noodzakelijk uit de twee gegeven premissen.',
+        }
+      : {
+          copied: 'Copied',
+          copyFailed: 'Copy failed',
+          jsonCopied: 'JSON copied',
+          ready: 'READY',
+          evaluating: 'EVALUATING…',
+          complete: 'ANALYSIS COMPLETE',
+          empty: 'Enter an argument before running the analysis.',
+          started: '[INFO] Initializing Elenchos argument verification…',
+          parsing: '[0.1s] Parsing claim boundaries and assumptions…',
+          structuring: '[0.4s] Structuring premise dependencies…',
+          scanning: '[0.8s] Checking formal and informal fallacies…',
+          score: 'Validity score',
+          fallacy: 'Pattern',
+          rationale: 'Rationale',
+          invalid: 'LOGICALLY FLAWED',
+          informal: 'INFORMAL FALLACY',
+          valid: 'DEDUCTIVELY VALID',
+          slippery: 'Slippery slope',
+          adHominem: 'Ad hominem',
+          validSyllogism: 'None (valid syllogism)',
+          slipperyExplanation: 'The argument predicts an extreme chain of events without supporting the intermediate causal links.',
+          adHominemExplanation: 'The claim is dismissed based on the speaker’s background rather than the evidence.',
+          validExplanation: 'The conclusion follows necessarily from the two stated premises.',
+        };
+    const copyText = async (text: string, target: HTMLElement | null, message: string) => {
+      if (!target) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        target.textContent = message;
+      } catch {
+        target.textContent = labels.copyFailed;
+      }
+      window.setTimeout(() => {
+        target.textContent = '';
+      }, 2200);
+    };
+
+    project.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const isJson = button.dataset.copy === 'json';
+        const text = isJson ? project.dataset.json ?? '' : project.dataset.clone ?? '';
+        const target = project.querySelector<HTMLElement>(isJson ? '[data-json-status]' : '[data-copy-status]');
+        void copyText(text, target, isJson ? labels.jsonCopied : labels.copied);
+      });
+    });
+
+    const tabs = Array.from(project.querySelectorAll<HTMLButtonElement>('[data-tab]'));
+    const panels = Array.from(project.querySelectorAll<HTMLElement>('[data-panel]'));
+    const activateTab = (selected: HTMLButtonElement) => {
+      tabs.forEach((tab) => {
+        const active = tab === selected;
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.panel !== selected.dataset.tab;
+      });
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateTab(tab));
+      tab.addEventListener('keydown', (event) => {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+        event.preventDefault();
+        const step = event.key === 'ArrowRight' ? 1 : -1;
+        const next = tabs[(index + step + tabs.length) % tabs.length];
+        activateTab(next);
+        next.focus();
+      });
+    });
+
+    const input = project.querySelector<HTMLTextAreaElement>('[data-input]');
+    const runButton = project.querySelector<HTMLButtonElement>('[data-run]');
+    const output = project.querySelector<HTMLElement>('[data-output]');
+    const status = project.querySelector<HTMLElement>('[data-status]');
+    const samples = lang === 'nl'
+      ? {
+          slippery: 'Als we leerlingen AI-tools laten gebruiken voor essays, leren ze helemaal niet meer zelf denken. Uiteindelijk kan niemand meer schrijven of communiceren en storten onderwijsinstellingen in.',
+          'ad-hominem': 'Dr. Smith stelt dat subsidies voor hernieuwbare energie het elektriciteitsnet op lange termijn veerkrachtiger maken. Maar Dr. Smith werkte vijf jaar geleden voor een zonne-energiebedrijf, dus kunnen we zijn argument negeren.',
+          valid: 'Alle volledig autonome agents hebben geheugen nodig om de gespreksgeschiedenis bij te houden. Systeem X is een volledig autonome agent. Dus heeft Systeem X geheugen nodig om de gespreksgeschiedenis bij te houden.',
+        }
+      : {
+          slippery: 'If we allow students to use AI tools for writing essays, they will stop learning how to think altogether. Eventually, nobody will know how to write or communicate, leading to the collapse of academic institutions.',
+          'ad-hominem': 'Dr. Smith argues that renewable energy subsidies increase long-term grid resilience. But Dr. Smith worked for a solar tech company five years ago, so we can ignore his claims entirely.',
+          valid: 'All fully autonomous agents require state memory to maintain conversation history. System X is a fully autonomous agent. Therefore, System X requires state memory to maintain conversation history.',
+        };
+
+    project.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const preset = button.dataset.preset as keyof typeof samples | undefined;
+        if (input && preset) input.value = samples[preset];
+      });
+    });
+
+    runButton?.addEventListener('click', () => {
+      if (!input || !runButton || !output || !status) return;
+      const text = input.value.trim().toLowerCase();
+      if (!text) {
+        output.textContent = labels.empty;
+        return;
+      }
+
+      runButton.disabled = true;
+      status.textContent = labels.evaluating;
+      output.textContent = labels.started;
+      [labels.parsing, labels.structuring, labels.scanning].forEach((line, index) => {
+        window.setTimeout(() => {
+          output.textContent += `\n${line}`;
+        }, (index + 1) * 400);
+      });
+      window.setTimeout(() => {
+        const adHominem = text.includes('dr. smith') || text.includes(lang === 'nl' ? 'negeren' : 'ignore his claims');
+        const valid = !adHominem && (
+          text.includes(lang === 'nl' ? 'alle volledig autonome agents' : 'all fully autonomous agents')
+          || text.includes(lang === 'nl' ? 'dus heeft systeem x' : 'therefore')
+        );
+        const score = valid ? '0.98' : adHominem ? '0.20' : '0.35';
+        const type = valid ? labels.validSyllogism : adHominem ? labels.adHominem : labels.slippery;
+        const explanation = valid ? labels.validExplanation : adHominem ? labels.adHominemExplanation : labels.slipperyExplanation;
+        const verdict = valid ? labels.valid : adHominem ? labels.informal : labels.invalid;
+        output.textContent += `\n\n${labels.complete}\n${labels.score}: ${score} / 1.00\n${verdict}\n${labels.fallacy}: ${type}\n${labels.rationale}: ${explanation}`;
+        status.textContent = labels.complete;
+        runButton.disabled = false;
+      }, 1500);
+    });
+  }
+</script>

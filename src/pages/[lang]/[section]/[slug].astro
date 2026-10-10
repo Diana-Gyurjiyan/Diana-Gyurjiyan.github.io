@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import NoesisProject from '../../../components/NoesisProject.astro';
+import ElenchosProject from '../../../components/ElenchosProject.astro';
 import { langs, ui, sections, type Lang } from '../../../i18n/ui';
 import { sectionEntries, entryText } from '../../../lib/content';
 
@@ -33,6 +34,8 @@ const dateFormat = new Intl.DateTimeFormat(lang === 'nl' ? 'nl-NL' : 'en-GB', { 
   {
     entry.id === 'noesis' ? (
       <NoesisProject lang={lang} statusLabel={t.status[entry.data.status]} date={dateFormat.format(entry.data.date)} dateISO={entry.data.date.toISOString()} />
+    ) : entry.id === 'elenchos' ? (
+      <ElenchosProject lang={lang} statusLabel={t.status[entry.data.status]} date={dateFormat.format(entry.data.date)} dateISO={entry.data.date.toISOString()} />
     ) : (
       <article class="wrap">
         <div class="eyebrow"><a href={`/${lang}/${section.slug}/`} style="text-decoration:none">← {t.nav[section.nav]}</a></div>
