@@ -16,7 +16,7 @@ const linkedinUrl = 'https://www.linkedin.com/in/diana-gyurjiyan-688071129/';
 
 // TODO Diana: put a portrait in /public (for example portrait.jpg) and set this to '/portrait.jpg'.
 // While it is null, a placeholder block is shown.
-const portraitUrl: string | null = null;
+const portraitUrl: string | null = '/diana.jpg';
 ---
 
 <Base lang={lang} title={t.about.label} description={t.about.intro}>
@@ -25,8 +25,8 @@ const portraitUrl: string | null = null;
     <h1 class="page-title">{t.about.title}</h1>
 
     <div class="about">
-      <div class="portrait">
-        {portraitUrl ? <img src={portraitUrl} alt={t.siteTitle} /> : <span>{t.about.portrait}</span>}
+      <div class="portrait" data-protected-portrait>
+        {portraitUrl ? <img src={portraitUrl} alt={t.siteTitle} draggable="false" /> : <span>{t.about.portrait}</span>}
       </div>
       <div>
         <div class="about-copy">
@@ -136,3 +136,10 @@ const portraitUrl: string | null = null;
     }
   }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-protected-portrait]').forEach((portrait) => {
+    portrait.addEventListener('contextmenu', (event) => event.preventDefault());
+    portrait.addEventListener('dragstart', (event) => event.preventDefault());
+  });
+</script>
