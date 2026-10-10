@@ -91,7 +91,7 @@ const en = {
 // @ts-ignore
 const nl: typeof en = {
   siteTitle: 'Diana Gyurjiyan',
-  tagline: 'Bouwen aan productie-AI die verder redeneert dan de hype, geworteld in academisch onderzoek.',
+  tagline: 'Bouwen aan KI die verder gaat dan de hype, geworteld in academisch onderzoek.',
   nav: {
     home: 'Home',
     about: 'Over mij',
@@ -111,18 +111,18 @@ const nl: typeof en = {
   },
   about: {
     label: 'Over mij',
-    title: 'AI bouwen die ertoe doet',
-    intro: 'AI Backend Engineer en buitenpromovendus, op het snijvlak van toegepast onderzoek en AI in de praktijk. Ik bouw systemen die bruikbaar zijn en oog hebben voor de mensen en samenleving waarop ze invloed hebben.',
+    title: 'KI die ertoe doet',
+    intro: 'AI Backend Engineer en buitenpromovendus, op het snijvlak van toegepast onderzoek en KI in de praktijk. Ik bouw systemen die bruikbaar zijn en oog hebben voor de mensen en samenleving waarop ze invloed hebben.',
     paragraphs: [
-      'Ik werk als AI Backend Engineer bij Rabobank en ben buitenpromovendus aan de Erasmus Universiteit Rotterdam. In mijn werk breng ik toegepast onderzoek naar de praktijk, met aandacht voor AI-systemen die nuttig, betrouwbaar en afgestemd zijn op menselijke behoeften.',
-      'Van oktober 2022 tot september 2026 werkte ik bij ABN AMRO. Daar leidde ik de ontwikkeling van ABN AMRO GPT, een bankbreed GenAI-platform dat meer dan 20.000 gebruikers bedient via 10 productie-assistenten, met ruim 40.000 chats per dag. Mijn werk besloeg het hele traject: van modulaire RAG-architecturen en retrieval pipelines tot evaluatiekaders en adoptie binnen een grote organisatie.',
-      'Van juni 2020 tot oktober 2022 werkte ik als data scientist aan een COVID-19-project. Data inzetten in een snel veranderende context met grote maatschappelijke belangen heeft mijn aanpak gevormd: begin bij het probleem, baseer je op bewijs en houd de mensen die door een systeem worden geraakt in beeld.',
-      'Ik heb opleidingen in Artificial Intelligence, filosofie en rechten. Ik ben existentialist omdat ik geloof dat het bestaan voorafgaat aan de essentie: we zijn vrij om te kiezen wie we worden en dragen verantwoordelijkheid voor die keuzes. Die overtuiging probeer ik mee te nemen in mijn werk en in mijn omgang met AI en agents. Deze systemen nemen onze verantwoordelijkheid niet weg: wij blijven verantwoordelijk voor hoe we ze ontwerpen, welke keuzes we aan ze overlaten en hoe we hun output gebruiken.',
-      'Mijn promotieonderzoek aan de Erasmus Universiteit Rotterdam richt zich op abductief redeneren in grote taalmodellen en kwantumbenaderingen van taalmodellering. Ik leer snel, maak projecten af en wil technologie bouwen die echt iets betekent.',
+      'Ik werk als AI Backend Engineer bij Rabobank en ben buitenpromovendus aan de Erasmus Universiteit Rotterdam. In mijn werk probeer ik de brug te zijn tussen de academie en de praktijk. Hierbij richt ik de aandacht op KI-systemen die nuttig, betrouwbaar en afgestemd zijn op de mens.',
+      'Van oktober 2022 tot september 2026 werkte ik bij ABN AMRO. Daar leidde ik de ontwikkeling van ABN AMRO GPT, een bankbreed GenAI-platform dat meer dan 20.000 gebruikers hielp met behulp van 10 assistenten, met ruim 40.000 chats per dag. Mijn werk besloeg het hele traject: van modulaire RAG-architecturen en retrieval pipelines tot evaluatiekaders en adoptie binnen een grote organisatie.',
+      'Van juni 2020 tot oktober 2022 werkte ik als data scientist van het COVID-19-project. (Ongestructureerde) Data inzetten in een snel veranderende omgeving met grote maatschappelijke belangen heeft mijn aanpak gevormd: begin bij het probleem, baseer je op bewijs en houd de mensen die door een systeem worden geraakt in beeld.',
+      'Voor ik begon met werken heb ik drie opleidingen aan de universiteit gevolgd: Artificial Intelligence, Wijsbegeerte en rechten. Als existentialist geloof ik dat ons existentie voorafgaat aan de essentie: we zijn radicaal vrij om te kiezen wie we worden en dragen verantwoordelijkheid voor die keuzes. Die overtuiging probeer ik mee te nemen in mijn werk en in mijn omgang met KI en agents. Deze systemen nemen onze verantwoordelijkheid niet weg: wij blijven verantwoordelijk voor hoe we ze ontwerpen, welke keuzes we aan ze overlaten en hoe we hun output gebruiken.',
+      'Mijn promotieonderzoek aan de Erasmus Universiteit Rotterdam richt zich op abductief redeneren in grote taalmodellen en kwantumbenaderingen van taalmodellen. Ik leer snel, maak projecten af en wil technologie bouwen die echt iets betekent.',
     ],
     experienceTitle: 'Ervaring',
     experiences: [
-      ['Huidig', 'Rabobank · AI Backend Engineer', 'Bouwt AI-systemen voor productie op het snijvlak van engineering en toegepast onderzoek.'],
+      ['Huidig', 'Rabobank · AI Backend Engineer', 'Bouwt KI-systemen voor productie op het snijvlak van engineering en toegepast onderzoek.'],
       ['okt 2022 – sep 2026', 'ABN AMRO · GenAI Engineer', 'Leidde de ontwikkeling van ABN AMRO GPT, van modulaire RAG en retrieval tot evaluatie en brede adoptie.'],
       ['jun 2020 – okt 2022', 'COVID-19-project · Data Scientist', 'Zette data science in voor een complex vraagstuk op het gebied van volksgezondheid.'],
     ],
@@ -133,7 +133,7 @@ const nl: typeof en = {
     portrait: 'Portret',
     factFocus: 'Focus',
     factResearch: 'Onderzoek',
-    factResearchValue: 'Abductief redeneren in LLM’s en kwantumbenaderingen van taalmodellering',
+    factResearchValue: 'Abductief redeneren in LLM’s en kwantumbenaderingen van taalmodellen',
     factBased: 'Gevestigd in',
     factValue: 'AI-engineering, toegepast onderzoek en verantwoorde technologie',
     linkedin: 'Bekijk mijn LinkedIn-profiel',
@@ -144,7 +144,7 @@ const nl: typeof en = {
     essays: { title: 'Essays', intro: LOREM_SHORT },
     blocks: {
       title: 'Bouwstenen',
-      intro: 'Onderzoek wordt pas echt waardevol wanneer je de ideeën eruit kunt toepassen. Deze bouwstenen vertalen inzichten naar praktische, herbruikbare hulpmiddelen voor engineers en onderzoekers. Zo kunnen zij met minder omwegen van vraag naar experiment en van experiment naar resultaat werken.',
+      intro: 'Onderzoek wordt pas echt waardevol wanneer je de ideeën kunt toepassen. Deze bouwstenen vertalen academische inzichten naar praktische, herbruikbare hulpmiddelen voor engineers en onderzoekers. Zo kunnen zij met minder omwegen van vraag naar experiment en van experiment naar resultaat werken.',
     },
   },
   ui: {
