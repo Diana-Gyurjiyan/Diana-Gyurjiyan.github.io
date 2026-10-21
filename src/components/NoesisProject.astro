@@ -14,14 +14,14 @@ const copy = lang === 'nl'
       back: '← Bouwstenen',
       title: 'Noesis',
       pronunciation: '/ˈnoʊ.ə.sɪs/',
-      tagline: 'Een agentic onderzoeksassistent die academische artikelen vindt, beoordeelt en rangschikt op basis van jouw onderzoeksvraag.',
+      tagline: 'Een agentic onderzoeksassistent die artikelen vindt over meerdere bronnen, citaties verkent en bewijs haalt uit de literatuur, met herleidbare bronquotes.',
       openSource: 'Open source',
       workflow: 'Agentic workflow',
       github: 'Bekijk op GitHub ↗',
       clone: 'Kopieer git clone-commando',
       cloned: 'Gekopieerd',
       copyFailed: 'Kopiëren mislukt',
-      tabs: ['Probleem & visie', 'Werkwijze', 'Roadmap', 'Simulator'],
+      tabs: ['Probleem & visie', 'Werkwijze', 'Roadmap', 'Simulator', 'Aan de slag'],
       problemTitle: 'Waarom Noesis?',
       problemText: 'Wetenschappelijke literatuur vermenigvuldigt zich in dit AI-tijdperk in een moordend tempo. Het juiste artikel vinden tussen abstracts, trefwoorden en steeds meer publicaties kost tijd, vooral wanneer je zoekt naar een specifieke methode, dataset of technische beperking.',
       bottlenecksTitle: 'Waar zoeken tekortschiet',
@@ -32,32 +32,50 @@ const copy = lang === 'nl'
       ],
       promiseTitle: 'Van zoekresultaat naar onderbouwde keuze',
       promise: 'Noesis richt zich op inhoudelijke aansluiting: welke claims, methoden en resultaten zijn relevant voor jouw vraag én waarom?',
+      goalLabel: 'Doel',
+      goal: 'Van papers vinden naar begrijpen wat de literatuur werkelijk onderbouwt.',
       values: [
-        ['Sneller screenen', 'Krijg snel zicht op de gebruikte datasets, theorieën en methoden.'],
-        ['Inhoudelijke beoordeling', 'Kijk voorbij de titel naar claims, aannames en resultaten.'],
-        ['Gerichte shortlist', 'Bekijk eerst de artikelen met de beste onderbouwde fit.'],
+        ['Herleidbaar bewijs', 'Elke claim, methode, resultaat en beperking hoort bij een letterlijk citaat, met passage, pagina en sectie.'],
+        ['Citaties verkennen', 'Volg referenties en citerende artikelen, of laat een snowball vanuit één paper kandidaten voorstellen.'],
+        ['Eén bibliotheek zonder duplicaten', 'Dezelfde paper uit meerdere bronnen wordt één keer bewaard, aangevuld met DOI, pdf en abstract.'],
       ],
-      workflowTitle: 'Van vraag naar artikelshortlist',
-      workflowIntro: 'De beoogde pipeline bestaat uit vier stappen:',
+      workflowTitle: 'Van zoekvraag naar herleidbaar bewijs',
+      workflowIntro: 'De pipeline bestaat uit vier stappen:',
       steps: [
-        ['01 — Ontdekken', 'Artikelen ophalen via academische bronnen, passend bij de zoekcontext.'],
-        ['02 — Extraheren', 'Claims, methoden, datasets en beperkingen structureren.'],
-        ['03 — Beoordelen', 'De inhoudelijke fit met de onderzoeksvraag inschatten en motiveren.'],
-        ['04 — Samenvatten', 'Een gerangschikt overzicht leveren met argumenten voor verder lezen.'],
+        ['01 — Ontdekken', 'Zoek per trefwoord in meerdere bronnen, met optionele query-uitbreiding door een LLM. Dubbele resultaten worden samengevoegd op DOI, arXiv-ID en titel, ook ten opzichte van je bibliotheek.'],
+        ['02 — Indexeren', 'Pdf’s worden opgedeeld in passages met lokale Ollama-embeddings (nomic-embed-text), pgvector en full-text search.'],
+        ['03 — Bewijs extraheren', 'Claims, methoden, resultaten en beperkingen, elk met een letterlijk citaat. Items waarvan het citaat niet voorkomt, worden verworpen.'],
+        ['04 — Vragen en verkennen', 'Stel vragen over geïndexeerde papers met citaten naar passage en pagina, doorzoek de bibliotheek semantisch en verken citaties.'],
       ],
-      jsonLabel: 'Voorbeeld van een gestructureerde agent-uitvoer (JSON)',
+      sourcesLabel: 'Bronnen',
+      sources: [['arXiv', false], ['OpenAlex', false], ['Semantic Scholar', false], ['PubMed', false], ['Crossref', false], ['Google Scholar (SerpAPI)', true], ['Web (Tavily)', true]],
+      optional: 'optioneel',
+      jsonLabel: 'Voorbeeld van een geëxtraheerd bewijsitem (JSON)',
       copyJson: 'Kopieer JSON',
       jsonCopied: 'JSON gekopieerd',
       roadmapTitle: 'Roadmap',
-      roadmapIntro: 'Noesis is in actieve ontwikkeling. Dit zijn de volgende richtingen:',
+      roadmapIntro: 'Noesis is in actieve ontwikkeling. Vijf fasen, van papers vinden tot onderzoekslacunes signaleren:',
+      doneLabel: 'Klaar',
+      nextLabel: 'Volgende',
       roadmap: [
-        ['In ontwikkeling', 'Analyse van volledige PDF’s', 'Een modulaire RAG-pipeline om volledige artikelen en bijlagen doorzoekbaar te maken.'],
-        ['Gepland', 'Gespecialiseerde reviewer-agents', 'Meerdere rollen, zoals een methodologie-auditor en domeinspecialist, beoordelen een artikel vanuit verschillende perspectieven.'],
-        ['Op de roadmap', 'Citatie- en contextgrafieken', 'Artikelen verbinden met eerder werk en geciteerde bronnen.'],
-        ['Op de roadmap', 'Eigen filters en criteria', 'Criteria instellen voor bijvoorbeeld open-source code, benchmarks of hardwarevereisten.'],
+        ['Gedeeltelijk klaar', 'Ontdekking', 'Papers vinden en een bibliotheek zonder duplicaten opbouwen.',
+          ['Zoeken over meerdere bronnen', 'Citaties en snowball-uitbreiding', 'Ontdubbeling', 'Semantisch zoeken in de bibliotheek'],
+          ['Betere retrieval-kwaliteit', 'Reranking']],
+        ['Gedeeltelijk klaar', 'Bewijs', 'Bewijs uit papers halen met een herleidbare bron.',
+          ['Extractie met bronpassages'],
+          ['Achtergrondtaken', 'Review-acties', 'Gestructureerde velden']],
+        ['Gepland', 'Synthese', 'Bewijs over papers heen samenbrengen.',
+          [],
+          ['Normalisatie van claims', 'Relaties tussen claims', 'Echte detectie van tegenstrijdigheden']],
+        ['Gepland', 'Epistemiek', 'Duidelijk maken hoe sterk een uitspraak is onderbouwd.',
+          [],
+          ['Status per uitspraak: gesteld, onderbouwd, afgeleid of onbekend']],
+        ['Gepland', 'Onderzoekslacunes', 'Zien wat de literatuur nog niet beantwoordt.',
+          [],
+          ['Kandidaat-onderzoeksvragen', 'Zoeken naar werk dat een claim weerlegt']],
       ],
-      simulatorTitle: 'Agent-evaluatie simuleren',
-      simulatorIntro: 'Kies een onderzoeksvraag en een voorbeeldartikel om een gesimuleerde beoordeling te bekijken. Dit is een interface-demo, geen live modelaanroep.',
+      simulatorTitle: 'Bewijsextractie simuleren',
+      simulatorIntro: 'Kies een onderzoeksvraag en een voorbeeldartikel om gesimuleerde bewijsextractie te bekijken. Dit is een interface-demo, geen live modelaanroep.',
       topicLabel: 'Onderzoeksvraag',
       paperLabel: 'Voorbeeldartikel',
       topics: [
@@ -66,17 +84,17 @@ const copy = lang === 'nl'
         ['quant', 'LLM-quantisatie op consumenten-GPU’s'],
       ],
       papers: [
-        ['paper1', 'Artikel A — Efficiënte aandacht voor lange contexten'],
+        ['paper1', 'Artikel A — Sparse attention voor lange contexten'],
         ['paper2', 'Artikel B — Hallucinaties in multi-turn gesprekken'],
-        ['paper3', 'Artikel C — 4-bit-quantisatie voor edge-netwerken'],
+        ['paper3', 'Artikel C — 4-bit-quantisatie op consumenten-GPU’s'],
       ],
-      run: 'Simuleer evaluatie',
+      run: 'Simuleer extractie',
       idle: 'De simulatie-uitvoer verschijnt hier.',
       complete: 'VOLTOOID',
       queryMapped: 'Zoekcontext verwerkt',
-      fetching: 'Paper-metadata ophalen',
-      extracting: 'Methoden, benchmarks en codebeschikbaarheid analyseren',
-      evaluating: 'Relevantie beoordelen',
+      fetching: 'Passages ophalen uit',
+      extracting: 'Claims, methoden, resultaten en beperkingen extraheren',
+      evaluating: 'Citaten controleren tegen de bronpassages',
       score: 'Relevantie',
       rationale: 'Motivatie',
       rationales: {
@@ -84,20 +102,40 @@ const copy = lang === 'nl'
         strongQuant: 'Bespreekt quantisatie en benchmarks op hardware die aansluit bij de onderzoeksvraag.',
         low: 'De paper sluit beperkt aan op de gekozen onderzoeksvraag en randvoorwaarden.',
       },
+      evidenceTitle: 'Geëxtraheerd bewijs',
+      verified: 'citaat gevonden in passage',
+      page: 'p.',
+      gsTitle: 'Zelf draaien',
+      gsIntro: 'Noesis draait lokaal. Dit heb je nodig en zo start je het.',
+      prereqTitle: 'Vereisten',
+      prereqs: [
+        ['Docker', 'Voor de PostgreSQL-database (met pgvector).'],
+        ['Ollama', 'Voor lokale embeddings. Haal het model binnen met:'],
+        ['LLM-API-sleutels', 'Stel de sleutels van je gekozen provider in via je shell. Zet nooit sleutels in de repository.'],
+      ],
+      ollamaCmd: 'ollama pull nomic-embed-text',
+      commandsTitle: 'Commando’s',
+      copyCommands: 'Kopieer commando’s',
+      commandsCopied: 'Commando’s gekopieerd',
+      commandNotes: [
+        ['make dev', 'Start de ontwikkelomgeving.'],
+        ['make db-migrate', 'Past openstaande databasemigraties expliciet toe.'],
+      ],
+      devWarning: 'De inloggegevens in het compose-bestand zijn alleen bedoeld voor ontwikkeling. Gebruik ze niet in productie.',
       builtBy: 'Een onderzoeksprototype van',
     }
   : {
       back: '← Building blocks',
       title: 'Noesis',
       pronunciation: '/ˈnoʊ.ə.sɪs/',
-      tagline: 'An agentic research assistant that finds, evaluates, and ranks academic papers against your research question.',
+      tagline: 'An agentic research assistant that finds papers across sources, explores citations, and extracts evidence with traceable source quotes.',
       openSource: 'Open source',
       workflow: 'Agentic workflow',
       github: 'View on GitHub ↗',
       clone: 'Copy git clone command',
       cloned: 'Copied',
       copyFailed: 'Copy failed',
-      tabs: ['Problem & vision', 'Workflow', 'Roadmap', 'Simulator'],
+      tabs: ['Problem & vision', 'Workflow', 'Roadmap', 'Simulator', 'Getting started'],
       problemTitle: 'Why Noesis?',
       problemText: 'Scientific literature is growing quickly. Finding the right paper among abstracts, keywords, and a rising number of publications takes time — especially when you are looking for a specific method, dataset, or technical constraint.',
       bottlenecksTitle: 'Where search falls short',
@@ -108,32 +146,50 @@ const copy = lang === 'nl'
       ],
       promiseTitle: 'From search results to informed choices',
       promise: 'Noesis focuses on substantive fit: which claims, methods, and results matter to your question — and why?',
+      goalLabel: 'Goal',
+      goal: 'From finding papers to understanding what the literature actually supports.',
       values: [
-        ['Screen faster', 'Quickly see which datasets and methods a paper uses.'],
-        ['Evaluate substance', 'Look beyond the title at claims, assumptions, and results.'],
-        ['Build a focused shortlist', 'Start with papers whose fit is best supported.'],
+        ['Traceable evidence', 'Every claim, method, result, and limitation is tied to a verbatim quote, with passage, page, and section.'],
+        ['Citation exploration', 'Follow references and citing papers, or let a snowball from one paper suggest candidates.'],
+        ['One deduplicated library', 'The same paper from several sources is stored once, with missing DOI, PDF, and abstract filled in.'],
       ],
-      workflowTitle: 'From research question to shortlist',
-      workflowIntro: 'The intended pipeline has four steps:',
+      workflowTitle: 'From search query to traceable evidence',
+      workflowIntro: 'The pipeline has four steps:',
       steps: [
-        ['01 — Discover', 'Retrieve papers from academic sources that match the search context.'],
-        ['02 — Extract', 'Structure claims, methods, datasets, and limitations.'],
-        ['03 — Evaluate', 'Assess and explain each paper’s fit with the research question.'],
-        ['04 — Summarize', 'Produce a ranked digest with reasons to read further.'],
+        ['01 — Discover', 'Search per keyword across multiple sources, with optional LLM query expansion. Duplicates merge on DOI, arXiv ID, and title, including against your library.'],
+        ['02 — Index', 'PDFs are split into passages with local Ollama embeddings (nomic-embed-text), pgvector, and full-text search.'],
+        ['03 — Extract evidence', 'Claims, methods, results, and limitations, each with a verbatim quote. Items whose quote is not found are discarded.'],
+        ['04 — Ask and explore', 'Ask questions over indexed papers with citations to passage and page, search the library semantically, and explore citations.'],
       ],
-      jsonLabel: 'Example of structured agent output (JSON)',
+      sourcesLabel: 'Sources',
+      sources: [['arXiv', false], ['OpenAlex', false], ['Semantic Scholar', false], ['PubMed', false], ['Crossref', false], ['Google Scholar (SerpAPI)', true], ['Web (Tavily)', true]],
+      optional: 'optional',
+      jsonLabel: 'Example of an extracted evidence item (JSON)',
       copyJson: 'Copy JSON',
       jsonCopied: 'JSON copied',
       roadmapTitle: 'Roadmap',
-      roadmapIntro: 'Noesis is in active development. These are the next directions:',
+      roadmapIntro: 'Noesis is in active development. Five stages, from finding papers to surfacing research gaps:',
+      doneLabel: 'Done',
+      nextLabel: 'Next',
       roadmap: [
-        ['In development', 'Full-PDF analysis', 'A modular RAG pipeline to make complete papers and appendices searchable.'],
-        ['Planned', 'Specialized reviewer agents', 'Roles such as a methodology auditor and domain specialist assess a paper from different perspectives.'],
-        ['On the roadmap', 'Citation and context graphs', 'Connect papers to prior work and cited sources.'],
-        ['On the roadmap', 'Custom filters and criteria', 'Set criteria for open-source code, benchmarks, hardware requirements, and more.'],
+        ['Partly done', 'Discovery', 'Find papers and build a deduplicated library.',
+          ['Multi-source search', 'Citations and snowball expansion', 'Deduplication', 'Semantic search over the library'],
+          ['Better retrieval quality', 'Reranking']],
+        ['Partly done', 'Evidence', 'Pull evidence from papers with a traceable source.',
+          ['Extraction with source passages'],
+          ['Background jobs', 'Review actions', 'Structured fields']],
+        ['Planned', 'Synthesis', 'Bring evidence together across papers.',
+          [],
+          ['Claim normalization', 'Relations between claims', 'Real contradiction detection']],
+        ['Planned', 'Epistemics', 'Make clear how well a statement is supported.',
+          [],
+          ['Status per statement: stated, supported, inferred, or unknown']],
+        ['Planned', 'Research gaps', 'See what the literature does not yet answer.',
+          [],
+          ['Candidate research questions', 'Search for disconfirming work']],
       ],
-      simulatorTitle: 'Simulate an agent evaluation',
-      simulatorIntro: 'Choose a research question and sample paper to view a simulated assessment. This is an interface demo, not a live model call.',
+      simulatorTitle: 'Simulate evidence extraction',
+      simulatorIntro: 'Choose a research question and sample paper to view simulated evidence extraction. This is an interface demo, not a live model call.',
       topicLabel: 'Research question',
       paperLabel: 'Sample paper',
       topics: [
@@ -142,17 +198,17 @@ const copy = lang === 'nl'
         ['quant', 'LLM quantization on consumer GPUs'],
       ],
       papers: [
-        ['paper1', 'Paper A — Efficient attention for long contexts'],
+        ['paper1', 'Paper A — Sparse attention for long contexts'],
         ['paper2', 'Paper B — Hallucinations in multi-turn conversations'],
-        ['paper3', 'Paper C — 4-bit quantization for edge networks'],
+        ['paper3', 'Paper C — 4-bit quantization on consumer GPUs'],
       ],
-      run: 'Simulate evaluation',
+      run: 'Simulate extraction',
       idle: 'Simulation output will appear here.',
       complete: 'COMPLETE',
       queryMapped: 'Search context mapped',
-      fetching: 'Fetching paper metadata',
-      extracting: 'Analyzing methods, benchmarks, and code availability',
-      evaluating: 'Evaluating relevance',
+      fetching: 'Retrieving passages from',
+      extracting: 'Extracting claims, methods, results, and limitations',
+      evaluating: 'Verifying quotes against source passages',
       score: 'Relevance',
       rationale: 'Rationale',
       rationales: {
@@ -160,25 +216,46 @@ const copy = lang === 'nl'
         strongQuant: 'Covers quantization and benchmarks on hardware relevant to the research question.',
         low: 'The paper has limited alignment with the selected question and constraints.',
       },
+      evidenceTitle: 'Extracted evidence',
+      verified: 'quote found in passage',
+      page: 'p.',
+      gsTitle: 'Run it yourself',
+      gsIntro: 'Noesis runs locally. Here is what you need and how to start it.',
+      prereqTitle: 'Prerequisites',
+      prereqs: [
+        ['Docker', 'For the PostgreSQL database (with pgvector).'],
+        ['Ollama', 'For local embeddings. Pull the model with:'],
+        ['LLM API keys', 'Set the keys for your chosen provider in your shell. Never commit keys to the repository.'],
+      ],
+      ollamaCmd: 'ollama pull nomic-embed-text',
+      commandsTitle: 'Commands',
+      copyCommands: 'Copy commands',
+      commandsCopied: 'Commands copied',
+      commandNotes: [
+        ['make dev', 'Starts the development environment.'],
+        ['make db-migrate', 'Applies pending database migrations explicitly.'],
+      ],
+      devWarning: 'The credentials in the compose file are for development only. Do not use them in production.',
       builtBy: 'A research prototype by',
     };
 
 const cloneCommand = 'git clone https://github.com/Diana-Gyurjiyan/noesis.git';
+const setupCommands = `${cloneCommand}
+cd noesis
+make dev
+make db-migrate`;
 const jsonOutput = `{
   "paper_id": "arXiv:2403.99120",
-  "title": "Agentic Workflows in Small Language Model Fine-Tuning",
-  "relevance_score": 0.94,
-  "fit_verdict": "HIGH_PRIORITY_READ",
-  "key_extractions": {
-    "methodology": "Multi-agent critique loop with DPO",
-    "benchmark_used": ["GSM8K", "HumanEval"],
-    "code_available": true
-  },
-  "agent_rationale": "Matches the query's memory constraints and evaluation criteria."
+  "type": "limitation",
+  "text": "Accuracy degrades on sequences beyond 32k tokens.",
+  "quote": "performance drops noticeably once the context exceeds 32k tokens",
+  "page": 7,
+  "section": "Discussion",
+  "passage_id": "p-0412"
 }`;
 ---
 
-<article class="noesis wrap" data-noesis data-lang={lang} data-clone={cloneCommand} data-json={jsonOutput}>
+<article class="noesis wrap" data-noesis data-lang={lang} data-clone={cloneCommand} data-json={jsonOutput} data-setup={setupCommands}>
   <div class="eyebrow"><a href={`/${lang}/building-blocks/`} class="back-link">{copy.back}</a></div>
 
   <header class="project-header">
@@ -232,6 +309,7 @@ const jsonOutput = `{
       <h3>{copy.promiseTitle}</h3>
       <p>{copy.promise}</p>
     </div>
+    <p class="goal"><span class="goal-label">{copy.goalLabel}</span>{copy.goal}</p>
     <div class="card-grid value-grid">
       {copy.values.map(([title, description]) => (
         <article class="value-card">
@@ -256,6 +334,12 @@ const jsonOutput = `{
         </article>
       ))}
     </div>
+    <div class="sources" role="group" aria-label={copy.sourcesLabel}>
+      <span class="sources-label">{copy.sourcesLabel}</span>
+      {copy.sources.map(([name, isOptional]) => (
+        <span class={`chip${isOptional ? ' chip-optional' : ''}`}>{name}{isOptional && <em>{copy.optional}</em>}</span>
+      ))}
+    </div>
     <div class="json-heading">
       <h3>{copy.jsonLabel}</h3>
       <button class="text-button" type="button" data-copy="json">{copy.copyJson}</button>
@@ -271,13 +355,25 @@ const jsonOutput = `{
       <p>{copy.roadmapIntro}</p>
     </div>
     <div class="roadmap">
-      {copy.roadmap.map(([status, title, description], i) => (
-        <article class="roadmap-item">
+      {copy.roadmap.map(([status, title, description, done, next], i) => (
+        <article class={`roadmap-item${i < 2 ? ' is-active' : ''}`}>
           <div class="roadmap-index">0{i + 1}</div>
           <div>
-            <div class="roadmap-meta"><span class="pill">{status}</span></div>
+            <div class="roadmap-meta"><span class={`pill${i < 2 ? ' pill-active' : ''}`}>{status}</span></div>
             <h3>{title}</h3>
             <p>{description}</p>
+            <div class="roadmap-lists">
+              {done.length > 0 && (
+                <div>
+                  <h4>{copy.doneLabel}</h4>
+                  <ul class="list-done">{done.map((item) => <li>{item}</li>)}</ul>
+                </div>
+              )}
+              <div>
+                <h4>{copy.nextLabel}</h4>
+                <ul class="list-next">{next.map((item) => <li>{item}</li>)}</ul>
+              </div>
+            </div>
           </div>
         </article>
       ))}
@@ -343,6 +439,37 @@ const jsonOutput = `{
     </div>
     <button class="project-link sim-run" type="button" data-run>{copy.run}</button>
     <div class="sim-output" aria-live="polite" data-output>{copy.idle}</div>
+  </section>
+
+  <section class="project-panel" id="noesis-panel-4" role="tabpanel" aria-labelledby="noesis-tab-4" data-panel="4" hidden>
+    <div class="section-heading">
+      <p class="eyebrow">{copy.tabs[4]}</p>
+      <h2>{copy.gsTitle}</h2>
+      <p>{copy.gsIntro}</p>
+    </div>
+    <h3 class="subheading">{copy.prereqTitle}</h3>
+    <div class="card-grid">
+      {copy.prereqs.map(([title, description], i) => (
+        <article class="plain-card">
+          <span class="card-number">0{i + 1}</span>
+          <h3>{title}</h3>
+          <p>{description}</p>
+          {i === 1 && <code class="inline-cmd">{copy.ollamaCmd}</code>}
+        </article>
+      ))}
+    </div>
+    <div class="json-heading setup-heading">
+      <h3>{copy.commandsTitle}</h3>
+      <button class="text-button" type="button" data-copy="setup">{copy.copyCommands}</button>
+    </div>
+    <pre class="json-example terminal"><code>{setupCommands.split('\n').map((line) => (<span class="cmd-line">{line + '\n'}</span>))}</code></pre>
+    <span class="copy-status" data-setup-status aria-live="polite"></span>
+    <dl class="command-notes">
+      {copy.commandNotes.map(([cmd, note]) => (
+        <div><dt><code>{cmd}</code></dt><dd>{note}</dd></div>
+      ))}
+    </dl>
+    <p class="project-note dev-warning">{copy.devWarning}</p>
   </section>
 
   <footer class="project-footer">
@@ -714,7 +841,222 @@ const jsonOutput = `{
   .project-footer a {
     color: var(--ink);
   }
+  .goal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 14px;
+    margin: 0 0 clamp(26px, 4vw, 40px);
+    padding: 18px 20px;
+    border: 1px solid color-mix(in srgb, var(--project-accent) 40%, var(--ln));
+    background: linear-gradient(120deg, color-mix(in srgb, var(--project-accent) 10%, var(--bg)), var(--bg) 70%);
+    font: 400 clamp(19px, 2.6vw, 24px)/1.3 var(--serif);
+  }
+  .goal-label {
+    color: var(--project-accent);
+    font: 500 11px/1 var(--sans);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .step {
+    position: relative;
+    transition: transform 0.25s ease;
+  }
+  .step:hover {
+    transform: translateY(-3px);
+  }
+  .step::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 36%;
+    height: 2px;
+    background: var(--project-accent);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--project-accent) 70%, transparent);
+  }
+  .sources {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 36px;
+  }
+  .sources-label {
+    margin-right: 6px;
+    color: var(--mu);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .chip {
+    padding: 5px 11px;
+    border: 1px solid color-mix(in srgb, var(--project-accent) 40%, var(--ln));
+    border-radius: 999px;
+    font-size: 12px;
+    transition: background-color 0.2s ease;
+  }
+  .chip:hover {
+    background: color-mix(in srgb, var(--project-accent) 10%, var(--bg));
+  }
+  .chip-optional {
+    border-style: dashed;
+    border-color: var(--ln);
+    color: var(--mu);
+  }
+  .chip em {
+    margin-left: 6px;
+    font-size: 10px;
+    opacity: 0.8;
+  }
+  .pill-active {
+    background: color-mix(in srgb, var(--project-accent) 12%, transparent);
+  }
+  .roadmap-item {
+    position: relative;
+  }
+  .roadmap-index {
+    position: relative;
+  }
+  .roadmap-item.is-active {
+    box-shadow: inset 2px 0 0 var(--project-accent);
+    padding-left: 14px;
+    margin-left: -16px;
+  }
+  .roadmap-lists {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 28px;
+    margin-top: 14px;
+  }
+  .roadmap-lists h4 {
+    color: var(--mu);
+    font: 500 11px/1 var(--sans);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .roadmap-lists ul {
+    display: grid;
+    gap: 5px;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 14px;
+  }
+  .roadmap-lists li {
+    position: relative;
+    padding-left: 20px;
+  }
+  .roadmap-lists li::before {
+    position: absolute;
+    left: 0;
+    color: var(--project-accent);
+  }
+  .list-done li::before {
+    content: '✓';
+  }
+  .list-next li::before {
+    content: '→';
+    color: var(--mu);
+  }
+  .terminal {
+    position: relative;
+    padding-top: 40px;
+  }
+  .terminal::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--ln);
+    box-shadow: 15px 0 0 var(--ln), 30px 0 0 var(--ln);
+  }
+  .cmd-line::before {
+    content: '$ ';
+    color: var(--project-accent);
+  }
+  .setup-heading {
+    margin-top: 40px;
+  }
+  .inline-cmd {
+    display: block;
+    margin-top: 12px;
+    padding: 8px 10px;
+    border: 1px solid var(--ln);
+    background: color-mix(in srgb, var(--blk) 8%, var(--bg));
+    font: 400 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+    overflow-x: auto;
+  }
+  .command-notes {
+    display: grid;
+    gap: 10px;
+    margin: 22px 0 0;
+  }
+  .command-notes div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+  }
+  .command-notes dt code {
+    color: var(--project-accent);
+    font-size: 13px;
+  }
+  .command-notes dd {
+    margin: 0;
+    color: var(--mu);
+    font-size: 14px;
+  }
+  .dev-warning {
+    margin-bottom: 0;
+  }
+  .sim-output .ev {
+    display: block;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-left: 2px solid var(--project-accent);
+    background: color-mix(in srgb, var(--project-accent) 6%, transparent);
+    white-space: normal;
+  }
+  .sim-output .ev-type {
+    color: var(--project-accent);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 11px;
+  }
+  .sim-output .ev q {
+    display: block;
+    margin-top: 4px;
+    color: var(--ink);
+    font-style: italic;
+  }
+  .sim-output .ev small {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .step,
+    .chip {
+      transition: none;
+    }
+    .step:hover {
+      transform: none;
+    }
+  }
   @media (max-width: 700px) {
+    .roadmap-lists {
+      grid-template-columns: 1fr;
+    }
+    .roadmap-item {
+      grid-template-columns: 40px minmax(0, 1fr);
+    }
+    .roadmap-item.is-active {
+      margin-left: 0;
+    }
     .card-grid {
       grid-template-columns: 1fr;
     }
@@ -741,6 +1083,13 @@ const jsonOutput = `{
     }
   }
   @media (max-width: 420px) {
+    .roadmap-item {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+    .goal {
+      padding: 14px;
+    }
     .steps {
       grid-template-columns: 1fr;
     }
@@ -760,15 +1109,19 @@ const jsonOutput = `{
       ? {
           cloned: 'Gekopieerd',
           jsonCopied: 'JSON gekopieerd',
+          commandsCopied: 'Commando’s gekopieerd',
           copyFailed: 'Kopiëren mislukt',
           running: 'AGENT BEZIG…',
           complete: 'VOLTOOID',
           queryMapped: 'Zoekcontext verwerkt',
-          fetching: 'Paper-metadata ophalen',
-          extracting: 'Methoden, benchmarks en codebeschikbaarheid analyseren',
-          evaluating: 'Relevantie beoordelen',
+          fetching: 'Passages ophalen uit',
+          extracting: 'Claims, methoden, resultaten en beperkingen extraheren',
+          evaluating: 'Citaten controleren tegen de bronpassages',
           score: 'Relevantie',
           rationale: 'Motivatie',
+          evidenceTitle: 'Geëxtraheerd bewijs',
+          verified: 'citaat gevonden in passage',
+          page: 'p.',
           strongRag: 'Sluit direct aan op sparse attention en de geheugenbeperking in lange-contexttoepassingen.',
           strongQuant: 'Bespreekt quantisatie en benchmarks op hardware die aansluit bij de onderzoeksvraag.',
           low: 'De paper sluit beperkt aan op de gekozen onderzoeksvraag en randvoorwaarden.',
@@ -777,19 +1130,37 @@ const jsonOutput = `{
             agents: 'Multi-agent samenwerking voor codegeneratie',
             quant: 'LLM-quantisatie op consumenten-GPU’s',
           },
+          evidence: {
+            paper1: [
+              ['claim', 'Sparse attention verlaagt het geheugengebruik bij lange contexten sterk.', 'sparse attention reduces peak memory by 61% at 128k tokens', 4, 'Resultaten'],
+              ['limitation', 'De nauwkeurigheid daalt bij sequenties boven 32k tokens.', 'performance drops noticeably once the context exceeds 32k tokens', 7, 'Discussie'],
+            ],
+            paper2: [
+              ['result', 'Hallucinaties nemen toe naarmate een gesprek langer wordt.', 'hallucination rate rose from 4% to 17% over ten turns', 5, 'Resultaten'],
+              ['method', 'Evaluatie met een door mensen geannoteerde multi-turn dataset.', 'we evaluate on 1,200 human-annotated multi-turn dialogues', 3, 'Methode'],
+            ],
+            paper3: [
+              ['claim', '4-bit-quantisatie draait een 7B-model op één consumenten-GPU.', 'a 7B model fits within 6 GB of VRAM at 4-bit precision', 5, 'Resultaten'],
+              ['limitation', 'Getest op een enkele GPU-generatie.', 'we only evaluate on a single GPU generation', 8, 'Beperkingen'],
+            ],
+          },
         }
       : {
           cloned: 'Copied',
           jsonCopied: 'JSON copied',
+          commandsCopied: 'Commands copied',
           copyFailed: 'Copy failed',
           running: 'AGENT RUNNING…',
           complete: 'COMPLETE',
           queryMapped: 'Search context mapped',
-          fetching: 'Fetching paper metadata',
-          extracting: 'Analyzing methods, benchmarks, and code availability',
-          evaluating: 'Evaluating relevance',
+          fetching: 'Retrieving passages from',
+          extracting: 'Extracting claims, methods, results, and limitations',
+          evaluating: 'Verifying quotes against source passages',
           score: 'Relevance',
           rationale: 'Rationale',
+          evidenceTitle: 'Extracted evidence',
+          verified: 'quote found in passage',
+          page: 'p.',
           strongRag: 'Directly addresses sparse attention and memory constraints in long-context applications.',
           strongQuant: 'Covers quantization and benchmarks on hardware relevant to the research question.',
           low: 'The paper has limited alignment with the selected question and constraints.',
@@ -798,9 +1169,25 @@ const jsonOutput = `{
             agents: 'Multi-agent collaboration for code generation',
             quant: 'LLM quantization on consumer GPUs',
           },
+          evidence: {
+            paper1: [
+              ['claim', 'Sparse attention sharply reduces memory use on long contexts.', 'sparse attention reduces peak memory by 61% at 128k tokens', 4, 'Results'],
+              ['limitation', 'Accuracy degrades on sequences beyond 32k tokens.', 'performance drops noticeably once the context exceeds 32k tokens', 7, 'Discussion'],
+            ],
+            paper2: [
+              ['result', 'Hallucinations increase as a conversation gets longer.', 'hallucination rate rose from 4% to 17% over ten turns', 5, 'Results'],
+              ['method', 'Evaluated on a human-annotated multi-turn dataset.', 'we evaluate on 1,200 human-annotated multi-turn dialogues', 3, 'Method'],
+            ],
+            paper3: [
+              ['claim', '4-bit quantization runs a 7B model on a single consumer GPU.', 'a 7B model fits within 6 GB of VRAM at 4-bit precision', 5, 'Results'],
+              ['limitation', 'Tested on a single GPU generation.', 'we only evaluate on a single GPU generation', 8, 'Limitations'],
+            ],
+          },
         };
     const copyStatus = project.querySelector<HTMLElement>('[data-copy-status]');
     const jsonStatus = project.querySelector<HTMLElement>('[data-json-status]');
+    const setupStatus = project.querySelector<HTMLElement>('[data-setup-status]');
+    const setupCommands = project.dataset.setup ?? '';
     const cloneCommand = project.dataset.clone ?? '';
     const jsonOutput = project.dataset.json ?? '';
 
@@ -819,8 +1206,10 @@ const jsonOutput = `{
 
     project.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => {
       button.addEventListener('click', () => {
-        const isJson = button.dataset.copy === 'json';
-        void copyText(isJson ? jsonOutput : cloneCommand, isJson ? jsonStatus : copyStatus, isJson ? labels.jsonCopied : labels.cloned);
+        const kind = button.dataset.copy;
+        if (kind === 'json') void copyText(jsonOutput, jsonStatus, labels.jsonCopied);
+        else if (kind === 'setup') void copyText(setupCommands, setupStatus, labels.commandsCopied);
+        else void copyText(cloneCommand, copyStatus, labels.cloned);
       });
     });
 
@@ -955,7 +1344,21 @@ const jsonOutput = `{
         const rationale = strongRag ? labels.strongRag : strongQuant ? labels.strongQuant : labels.low;
         const scoreValue = document.createElement('strong');
         scoreValue.textContent = `${score} / 1.00`;
-        output.append(`\n\n${labels.complete}\n${labels.score}: `, scoreValue, `\n${labels.rationale}: ${rationale}`);
+        output.append(`\n\n${labels.complete}\n${labels.score}: `, scoreValue, `\n${labels.rationale}: ${rationale}\n\n${labels.evidenceTitle}:`);
+        const items = labels.evidence[paper as keyof typeof labels.evidence] ?? [];
+        items.forEach(([type, text, quote, page, section]) => {
+          const item = document.createElement('span');
+          item.className = 'ev';
+          const typeEl = document.createElement('span');
+          typeEl.className = 'ev-type';
+          typeEl.textContent = String(type);
+          const quoteEl = document.createElement('q');
+          quoteEl.textContent = String(quote);
+          const meta = document.createElement('small');
+          meta.textContent = `✓ ${labels.verified} · ${labels.page} ${page} · ${section}`;
+          item.append(typeEl, ` ${text}`, quoteEl, meta);
+          output.append(item);
+        });
         runButton.disabled = false;
       }, 1900);
     });
